@@ -13,6 +13,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private Camera mCamera;
     private String TAG = "CAMERA";
 
+    @SuppressWarnings("deprecation")
     public CameraPreview(Context context, Camera camera) {
         super(context);
         mCamera = camera;
@@ -37,7 +38,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
-        // empty. Take care of releasing the Camera preview in your activity.
+        mCamera.stopPreview();
+        mCamera.release();
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {

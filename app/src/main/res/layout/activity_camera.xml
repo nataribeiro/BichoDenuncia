@@ -1,46 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    tools:context="com.example.natanaelribeiro.bichodenuncia.CameraActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.natanaelribeiro.bichodenuncia.MainActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
     <FrameLayout
         android:id="@+id/camera_preview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:translationZ="3dp">
 
 
         <LinearLayout
+            android:id="@+id/cam_botoes_acao"
             android:orientation="horizontal"
             android:weightSum="2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom">
+            android:layout_gravity="center|bottom"
+            android:translationZ="2dp">
 
             <Button
                 android:layout_weight="1"
                 android:id="@+id/btn_capture_image"
                 android:text="Image"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:onClick="onClickTirarFoto" />
 
             <Button
                 android:layout_weight="1"
-                android:id="@+id/btn_capture_video"
+                android:id="@+id/btn_start_video"
                 android:text="Video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                />
+                android:translationZ="3dp"
+                android:onClick="onClickFilmar" />
+
+            <Button
+                android:visibility="gone"
+                android:layout_weight="2"
+                android:id="@+id/btn_stop_video"
+                android:text="Stop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:translationZ="3dp"
+                android:onClick="onClickStopVideo" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cam_botoes_confirmacao"
+            android:visibility="gone"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:translationZ="2dp">
+
+            <Button
+                android:layout_weight="1"
+                android:id="@+id/btn_confirma_captura"
+                android:text="OK"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:translationZ="3dp"
+                android:onClick="onClickConfirmaCaptura" />
+
+            <Button
+                android:layout_weight="1"
+                android:id="@+id/btn_cancela_captura"
+                android:text="X"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:translationZ="3dp"
+                android:onClick="onClickCancelaCaptura" />
+
 
         </LinearLayout>
 
 
     </FrameLayout>
 
-
-
 </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
