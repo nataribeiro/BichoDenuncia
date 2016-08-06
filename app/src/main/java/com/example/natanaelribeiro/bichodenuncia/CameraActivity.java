@@ -1,5 +1,8 @@
 package com.example.natanaelribeiro.bichodenuncia;
 
+import android.app.Activity;
+import android.app.Instrumentation;
+import android.content.Intent;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
@@ -20,6 +23,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class CameraActivity extends AppCompatActivity {
 
     public static final int MEDIA_TYPE_IMAGE = 1;
@@ -27,17 +34,22 @@ public class CameraActivity extends AppCompatActivity {
     private Camera mCamera;
     private CameraPreview mPreview;
     private MediaRecorder mRecorder;
-    private LinearLayout cam_botoes_acao;
-    private LinearLayout cam_botoes_confirmacao;
 
-    private Button btn_capture_image;
-    private Button btn_start_video;
-    private Button btn_stop_video;
+    private File pictureFile;
+    private byte[] dataFile;
+
+    @BindView(R.id.btn_capture_image) public Button btn_capture_image;
+    @BindView(R.id.btn_start_video) public Button btn_start_video;
+    @BindView(R.id.btn_stop_video) public Button btn_stop_video;
+    @BindView(R.id.cam_botoes_acao) public LinearLayout cam_botoes_acao;
+    @BindView(R.id.cam_botoes_confirmacao) public LinearLayout cam_botoes_confirmacao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+
+        ButterKnife.bind(this);
 
         // Create an instance of Camera
         mCamera = getCameraInstance();
@@ -50,12 +62,6 @@ public class CameraActivity extends AppCompatActivity {
         mPreview = new CameraPreview(this, mCamera);
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
-
-        cam_botoes_acao = (LinearLayout)findViewById(R.id.cam_botoes_acao);
-        cam_botoes_confirmacao = (LinearLayout)findViewById(R.id.cam_botoes_confirmacao);
-        btn_capture_image = (Button)findViewById(R.id.btn_capture_image);
-        btn_start_video = (Button)findViewById(R.id.btn_start_video);
-        btn_stop_video = (Button)findViewById(R.id.btn_stop_video);
     }
 
     public static Camera getCameraInstance(){
@@ -72,21 +78,13 @@ public class CameraActivity extends AppCompatActivity {
     Camera.PictureCallback mPicture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+            pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
             if(pictureFile == null){
                 Log.d("TakePicture", "Error creating media file, check storage permissions");
                 return;
             }
 
-            try {
-                FileOutputStream fos = new FileOutputStream(pictureFile);
-                fos.write(data);
-                fos.close();
-            } catch (FileNotFoundException e) {
-                Log.d("TakePicture", "File not found: " + e.getMessage());
-            } catch (IOException e) {
-                Log.d("TakePicture", "Error accessing file: " + e.getMessage());
-            }
+            dataFile = data;
         }
     };
 
@@ -123,7 +121,8 @@ public class CameraActivity extends AppCompatActivity {
         return mediaFile;
     }
 
-    public void onClickTirarFoto(View view){
+    @OnClick(R.id.btn_capture_image)
+    public void onClickTirarFoto() {
         mCamera.takePicture(null, null, mPicture);
         habilitaBotoesConfirmacao();
     }
@@ -182,7 +181,8 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickStopVideo(View view){
+    @OnClick(R.id.btn_stop_video)
+    public void onClickStopVideo(){
         mRecorder.stop();
         btn_start_video.setVisibility(View.VISIBLE);
         btn_capture_image.setVisibility(View.VISIBLE);
@@ -190,11 +190,26 @@ public class CameraActivity extends AppCompatActivity {
         habilitaBotoesConfirmacao();
     }
 
-    public void onClickConfirmaCaptura(View view){
+    @OnClick(R.id.btn_confirma_captura)
+    public void onClickConfirmaCaptura(){
+        try {
+            FileOutputStream fos = new FileOutputStream(pictureFile);
+            fos.write(dataFile);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            Log.d("SaveFile", "File not found: " + e.getMessage());
+        } catch (IOException e) {
+            Log.d("SaveFile", "Error accessing file: " + e.getMessage());
+        }
 
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("filePath", pictureFile.getPath());
+        this.setResult(RESULT_OK, resultIntent);
+        finish();
     }
 
-    public void onClickCancelaCaptura(View view) {
+    @OnClick(R.id.btn_cancela_captura)
+    public void onClickCancelaCaptura() {
         if(mRecorder!=null) {
             mRecorder.reset();
             mRecorder.release();

@@ -33,18 +33,17 @@
                 android:id="@+id/btn_capture_image"
                 android:text="Image"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onClickTirarFoto" />
+                android:layout_height="wrap_content" />
 
             <Button
                 android:layout_weight="1"
                 android:id="@+id/btn_start_video"
+                android:onClick="onClickFilmar"
                 android:text="Video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:translationZ="3dp"
-                android:onClick="onClickFilmar" />
+                android:translationZ="3dp" />
 
             <Button
                 android:visibility="gone"
@@ -54,8 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:translationZ="3dp"
-                android:onClick="onClickStopVideo" />
+                android:translationZ="3dp" />
 
         </LinearLayout>
 
@@ -71,13 +69,12 @@
 
             <Button
                 android:layout_weight="1"
-                android:id="@+id/btn_confirma_captura"
                 android:text="OK"
+                android:id="@+id/btn_confirma_captura"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:translationZ="3dp"
-                android:onClick="onClickConfirmaCaptura" />
+                android:translationZ="3dp" />
 
             <Button
                 android:layout_weight="1"
@@ -86,8 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:translationZ="3dp"
-                android:onClick="onClickCancelaCaptura" />
+                android:translationZ="3dp" />
 
 
         </LinearLayout>

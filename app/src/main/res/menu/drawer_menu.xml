@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_ultimas_denuncias"
+        android:title="Últimas Denúncias"/>
+
+    <item
+        android:id="@+id/nav_pesquisar_denuncia"
+        android:title="Pesquisar Denúncias"/>
+
+    <item
+        android:id="@+id/nav_cadastrar_entidade"
+        android:title="Cadastrar Entidade"/>
+
+    <item
+        android:id="@+id/nav_nova_denuncia"
+        android:title="Nova Denúncia"/>
+
+</menu>
