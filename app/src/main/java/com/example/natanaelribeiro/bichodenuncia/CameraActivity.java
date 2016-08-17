@@ -12,8 +12,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import java.io.File;
@@ -38,8 +41,8 @@ public class CameraActivity extends AppCompatActivity {
     private File pictureFile;
     private byte[] dataFile;
 
-    @BindView(R.id.btn_capture_image) public Button btn_capture_image;
-    @BindView(R.id.btn_start_video) public Button btn_start_video;
+    @BindView(R.id.btn_capture_image) public ImageButton btn_capture_image;
+    @BindView(R.id.btn_start_video) public ImageButton btn_start_video;
     @BindView(R.id.btn_stop_video) public Button btn_stop_video;
     @BindView(R.id.cam_botoes_acao) public LinearLayout cam_botoes_acao;
     @BindView(R.id.cam_botoes_confirmacao) public LinearLayout cam_botoes_confirmacao;
@@ -48,6 +51,9 @@ public class CameraActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ButterKnife.bind(this);
 
@@ -62,6 +68,12 @@ public class CameraActivity extends AppCompatActivity {
         mPreview = new CameraPreview(this, mCamera);
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
+
+        preview.removeView(cam_botoes_acao);
+        preview.addView(cam_botoes_acao);
+
+        preview.removeView(cam_botoes_confirmacao);
+        preview.addView(cam_botoes_confirmacao);
     }
 
     public static Camera getCameraInstance(){

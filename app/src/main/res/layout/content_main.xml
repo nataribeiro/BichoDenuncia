@@ -27,7 +27,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/logo"
             android:id="@+id/imageView"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:contentDescription="@string/texto_bicho_denuncia" />
 
     </LinearLayout>
 
@@ -41,10 +42,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/nova_denuncia2"
-            android:backgroundTint="@android:color/transparent"
+            android:background="@android:color/transparent"
             android:id="@+id/imageButton"
             android:layout_gravity="center_horizontal"
-            android:onClick="onClickNovaDenuncia" />
+            android:onClick="onClickNovaDenuncia"
+            android:contentDescription="@string/texto_nova_denuncia" />
 
     </LinearLayout>
 </LinearLayout>

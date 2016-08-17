@@ -26,24 +26,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
-            android:translationZ="2dp">
+            android:translationZ="99dp">
 
-            <Button
+            <ImageButton
                 android:layout_weight="1"
                 android:id="@+id/btn_capture_image"
-                android:text="Image"
+                android:src="@drawable/foto"
+                android:background="@android:color/transparent"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="60dp"
+                android:scaleType="fitCenter"
+                    android:translationZ="100dp"/>
 
-            <Button
+            <ImageButton
                 android:layout_weight="1"
                 android:id="@+id/btn_start_video"
                 android:onClick="onClickFilmar"
-                android:text="Video"
+                android:src="@drawable/video"
+                android:background="@android:color/transparent"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
+                android:scaleType="fitCenter"
                 android:layout_gravity="center"
-                android:translationZ="3dp" />
+                android:translationZ="100dp" />
 
             <Button
                 android:visibility="gone"
@@ -53,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:translationZ="3dp" />
+                android:translationZ="100dp" />
 
         </LinearLayout>
 
@@ -65,7 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
-            android:translationZ="2dp">
+            android:translationZ="5dp">
 
             <Button
                 android:layout_weight="1"
@@ -74,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:translationZ="3dp" />
+                android:translationZ="7dp" />
 
             <Button
                 android:layout_weight="1"
@@ -83,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:translationZ="3dp" />
+                android:translationZ="7dp" />
 
 
         </LinearLayout>

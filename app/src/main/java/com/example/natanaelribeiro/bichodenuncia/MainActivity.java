@@ -10,12 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 
 import butterknife.BindView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private String filePath;
+    private final int REQUEST_CAMERA = 1;
 
     @BindView(R.id.nav_view) public NavigationView nav_view;
 
@@ -24,27 +26,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.ic_logo);
 
 
-
-        nav_view.setNavigationItemSelectedListener(this);
+        //nav_view.setNavigationItemSelectedListener(this);
     }
 
     public void onClickNovaDenuncia(View view) {
         Intent intent = new Intent(this, CameraActivity.class);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, REQUEST_CAMERA);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 1){
+        if(requestCode == REQUEST_CAMERA){
             if(resultCode == RESULT_OK){
                 filePath = data.getStringExtra("filePath");
-
+                Intent intent = new Intent(this, EscolheCategoriaActivity.class);
+                startActivity(intent);
             }
         }
     }

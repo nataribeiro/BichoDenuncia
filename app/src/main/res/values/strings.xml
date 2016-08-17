@@ -1,5 +1,24 @@
 <resources>
-    <string name="app_name">BichoDenuncia</string>
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="app_name">Bicho Denuncia</string>
+    <string name="google_maps_key">AIzaSyCwlgqpP7KtrVYy3NIP5dA3HDBkXRcyaxA</string>
+    <string name="title_activity_main2">Bicho Denuncia</string>
+    <string name="title_activity_main">Bicho Denuncia</string>
+    <string name="question_animal">Que animal é a vítima?</string>
+    <string name="choose_cat">Escolha a categoria:</string>
+    <string name="texto_animais_selvagens">Animais Selvagens</string>
+    <string name="texto_animais_domesticos">Animais Domésticos</string>
+    <string name="texto_nova_denuncia">Nova Denúncia</string>
+    <string name="texto_bicho_denuncia">Bicho Denúncia</string>
+    <string name="texto_gato">Gato</string>
+    <string name="texto_cachorro">Cachorro</string>
+    <string name="texto_cavalo">Cavalo</string>
+    <string name="texto_roedor">Roedor</string>
+    <string name="texto_primata">Primata</string>
+    <string name="texto_ave">Ave</string>
+    <string name="texto_marinho">Marinho</string>
+    <string name="texto_outro">Outro</string>
+    <string name="detalhes_do_ocorrido">Detalhes do ocorrido:</string>
+    <string name="hint_desc_denuncia">Descrição da denúncia...</string>
+    <string name="hint_hashtags"># Hashtags:</string>
+    <string name="hint_localizacao">Localização:</string>
 </resources>
