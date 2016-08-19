@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Bicho Denuncia</string>
     <string name="google_maps_key">AIzaSyCwlgqpP7KtrVYy3NIP5dA3HDBkXRcyaxA</string>
+    <string name="facebook_app_id">857534304378544</string>
+
     <string name="title_activity_main2">Bicho Denuncia</string>
     <string name="title_activity_main">Bicho Denuncia</string>
     <string name="question_animal">Que animal é a vítima?</string>
@@ -21,4 +23,6 @@
     <string name="hint_desc_denuncia">Descrição da denúncia...</string>
     <string name="hint_hashtags"># Hashtags:</string>
     <string name="hint_localizacao">Localização:</string>
+    <string name="hint_email">E-mail</string>
+    <string name="hint_telefone">Telefone</string>
 </resources>

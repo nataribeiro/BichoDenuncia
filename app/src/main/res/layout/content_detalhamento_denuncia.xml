@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:weightSum="8"
+    android:weightSum="9"
     android:background="@drawable/fundo"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <!--Titulo da activity-->
     <LinearLayout
-        android:layout_weight="1"
+        android:paddingTop="50dp"
+        android:layout_weight="2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -33,11 +34,14 @@
             android:hint="@string/hint_desc_denuncia"
             android:id="@+id/edit_descricao_denuncia"
             android:background="@android:color/white"
+            android:textColor="@android:color/black"
             android:layout_weight="1"
             android:layout_marginLeft="30dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="textMultiLine|textCapSentences" />
+            android:inputType="textMultiLine|textCapSentences"
+            android:textColorHint="@android:color/black"
+            android:singleLine="false" />
 
         <ImageButton
             android:id="@+id/btnAudio"
@@ -60,22 +64,28 @@
 
         <EditText
             android:layout_weight="1"
+            android:backgroundTint="@android:color/white"
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/white"
             android:id="@+id/edit_hashtags"
             android:hint="@string/hint_hashtags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textWebEditText" />
+            android:inputType="textWebEditText"
+            android:minLines="1"
+            android:singleLine="true" />
 
         <EditText
             android:layout_weight="1"
+            android:backgroundTint="@android:color/white"
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/white"
             android:id="@+id/edit_localizacao"
             android:hint="@string/hint_localizacao"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:minLines="1"
+            android:singleLine="true" />
 
     </LinearLayout>
 

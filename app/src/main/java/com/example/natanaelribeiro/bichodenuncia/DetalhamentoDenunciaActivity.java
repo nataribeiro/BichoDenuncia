@@ -2,7 +2,10 @@ package com.example.natanaelribeiro.bichodenuncia;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -11,8 +14,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -27,7 +32,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class DetalhamentoDenunciaActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, LocationListener, GoogleApiClient.OnConnectionFailedListener {
 
@@ -37,6 +48,8 @@ public class DetalhamentoDenunciaActivity extends AppCompatActivity implements O
     public EditText edit_hashtags;
     @BindView(R.id.edit_localizacao)
     public EditText edit_localizacao;
+    @BindView(R.id.btn_continuar_para_identificacao)
+    public ImageButton btn_continuar_para_identificacao;
     private GoogleMap mMap;
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
@@ -55,8 +68,16 @@ public class DetalhamentoDenunciaActivity extends AppCompatActivity implements O
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.ic_logo);
 
+        ButterKnife.bind(this);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    @OnClick(R.id.btn_continuar_para_identificacao)
+    public void onClickContinuar(){
+        Intent intent = new Intent(this, IdentificacaoActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -100,11 +121,41 @@ public class DetalhamentoDenunciaActivity extends AppCompatActivity implements O
     public void updateCamera(Location loc) {
         LatLng eu = new LatLng(loc.getLatitude(), loc.getLongitude());
         if (markerMyLocation == null) {
-            markerMyLocation = mMap.addMarker(new MarkerOptions().position(eu).title("Estou aqui"));
-        } else {
-            markerMyLocation.setPosition(eu);
+            markerMyLocation = mMap.addMarker(new MarkerOptions().position(eu));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(eu, 16));
+            setEnderecoFromLocation(loc);
         }
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(eu, 16));
+
+    }
+
+    private void setEnderecoFromLocation(Location location){
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            String endereco = addresses.get(0).getAddressLine(0);
+            String cidade = addresses.get(0).getLocality();
+            String estado = addresses.get(0).getAdminArea();
+            String pais = addresses.get(0).getCountryName();
+            String cep = addresses.get(0).getPostalCode();
+            String knownName = addresses.get(0).getFeatureName();
+
+            Log.i("address", "endereco: " + endereco);
+            Log.i("address", "cidade: " + cidade);
+            Log.i("address", "estado: " + estado);
+            Log.i("address", "pais: " + pais);
+            Log.i("address", "cep: " + cep);
+            Log.i("address", "knownName: " + knownName);
+
+            edit_localizacao.setText(endereco + " - " + cidade + "/" + estado);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     @TargetApi(Build.VERSION_CODES.M)
