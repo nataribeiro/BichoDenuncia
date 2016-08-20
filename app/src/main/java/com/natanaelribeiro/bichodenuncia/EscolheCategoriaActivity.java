@@ -1,20 +1,27 @@
-package com.example.natanaelribeiro.bichodenuncia;
+package com.natanaelribeiro.bichodenuncia;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
-import com.example.natanaelribeiro.bichodenuncia.AppCode.Constantes;
+import com.natanaelribeiro.bichodenuncia.AppCode.Constantes;
 
+import java.lang.reflect.Type;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * Created by 631610277 on 06/08/16.
  */
 public class EscolheCategoriaActivity extends AppCompatActivity {
+
+    @BindView(R.id.txtCategoria) public TextView txtCategoria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +35,9 @@ public class EscolheCategoriaActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.ic_logo);
+
+        ButterKnife.bind(this);
+        //txtCategoria.setTypeface(Typeface.createFromAsset(getAssets(), "Roboto-Bold.ttf"));
     }
 
     public void onClickAnimaisDomesticos(View view){

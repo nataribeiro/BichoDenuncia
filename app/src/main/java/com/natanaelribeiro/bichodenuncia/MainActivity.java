@@ -1,6 +1,5 @@
-package com.example.natanaelribeiro.bichodenuncia;
+package com.natanaelribeiro.bichodenuncia;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -11,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+
 
 import butterknife.BindView;
 
@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.ic_logo);
 
+        //TODO Tirar após finalizar login com Google
+        //AccessToken.setCurrentAccessToken(null);
 
         //nav_view.setNavigationItemSelectedListener(this);
     }

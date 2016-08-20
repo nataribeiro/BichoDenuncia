@@ -1,4 +1,4 @@
-package com.example.natanaelribeiro.bichodenuncia.Custom;
+package com.natanaelribeiro.bichodenuncia.Custom;
 
 import android.content.Context;
 import android.content.res.TypedArray;

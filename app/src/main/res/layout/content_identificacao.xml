@@ -27,23 +27,29 @@
         android:id="@+id/area_deslogado"
         android:layout_weight="1"
         android:weightSum="1.5"
-        android:visibility="gone"
+        android:visibility="visible"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageButton
             android:id="@+id/btn_logar_facebook"
-            android:layout_weight="1"
+            android:layout_weight="0.75"
             android:background="@android:color/transparent"
             android:src="@drawable/facebook"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
 
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <ImageButton
             android:id="@+id/btn_logar_google"
-            android:layout_weight="1"
+            android:layout_weight="0.75"
             android:background="@android:color/transparent"
             android:src="@drawable/google"
             android:layout_width="match_parent"
@@ -54,30 +60,32 @@
     <LinearLayout
         android:layout_weight="1"
         android:weightSum="3"
+        android:background="@color/colorPrimary"
         android:paddingLeft="30dp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:id="@+id/area_logado"
         android:orientation="horizontal"
         android:translationZ="2dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!--<ImageView-->
-            <!--android:id="@+id/img_usuario"-->
-            <!--android:layout_weight="2"-->
-            <!--android:layout_gravity="center_vertical"-->
-            <!--android:translationZ="4dp"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content" />-->
-
-        <com.example.natanaelribeiro.bichodenuncia.Custom.ProfilePictureView
+        <com.natanaelribeiro.bichodenuncia.Custom.ProfilePictureView
             android:layout_weight="2"
+            android:visibility="gone"
             android:layout_gravity="center_vertical"
             android:id="@+id/img_usuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             facebook:preset_size="small"/>
+
+        <ImageView
+            android:layout_weight="2"
+            android:visibility="gone"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/img_usuario_google"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <TextView
             android:layout_weight="1"

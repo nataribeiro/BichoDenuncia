@@ -1,4 +1,4 @@
-package com.example.natanaelribeiro.bichodenuncia;
+package com.natanaelribeiro.bichodenuncia;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 
-import com.example.natanaelribeiro.bichodenuncia.AppCode.Constantes;
+import com.natanaelribeiro.bichodenuncia.AppCode.Constantes;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -1,4 +1,4 @@
-package com.example.natanaelribeiro.bichodenuncia;
+package com.natanaelribeiro.bichodenuncia;
 
 import android.content.Context;
 import android.hardware.Camera;

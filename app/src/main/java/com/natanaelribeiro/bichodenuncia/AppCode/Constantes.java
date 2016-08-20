@@ -1,4 +1,4 @@
-package com.example.natanaelribeiro.bichodenuncia.AppCode;
+package com.natanaelribeiro.bichodenuncia.AppCode;
 
 /**
  * Created by natanaelribeiro on 10/08/16.

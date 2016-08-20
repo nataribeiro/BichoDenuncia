@@ -1,7 +1,5 @@
-package com.example.natanaelribeiro.bichodenuncia;
+package com.natanaelribeiro.bichodenuncia;
 
-import android.app.Activity;
-import android.app.Instrumentation;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
@@ -10,9 +8,7 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.SurfaceView;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
