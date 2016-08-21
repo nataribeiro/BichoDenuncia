@@ -1,32 +1,25 @@
 package com.natanaelribeiro.bichodenuncia;
 
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.natanaelribeiro.bichodenuncia.AppCode.Constantes;
 
-import java.lang.reflect.Type;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-/**
- * Created by 631610277 on 06/08/16.
- */
-public class EscolheCategoriaActivity extends AppCompatActivity {
+public class DenunciaEnviadaActivity extends AppCompatActivity {
 
-    @BindView(R.id.txtCategoria) public TextView txtCategoria;
+    private String filePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_escolhe_categoria);
+        setContentView(R.layout.activity_denuncia_enviada);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -34,7 +27,7 @@ public class EscolheCategoriaActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_white_24dp);
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_left_white_24dp);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setLogo(R.drawable.ic_logo);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -45,21 +38,28 @@ public class EscolheCategoriaActivity extends AppCompatActivity {
         });
 
         ButterKnife.bind(this);
-        //txtCategoria.setTypeface(Typeface.createFromAsset(getAssets(), "Roboto-Bold.ttf"));
     }
 
-    public void onClickAnimaisDomesticos(View view){
-        NextActivity(Constantes.ANIMAIS_DOMESTICOS);
-    }
-
-    public void onClickAnimaisSelvagens(View view){
-        NextActivity(Constantes.ANIMAIS_SELVAGENS);
-    }
-
-    private void NextActivity(String categoria){
-        Intent intent = new Intent(this, EscolheAnimalActivity.class);
-        intent.putExtra("categoria", categoria);
+    @OnClick(R.id.btn_ir_pesquisa)
+    public void onClickPesquisarDenuncia(){
+        Intent intent = new Intent(this, PesquisarDenunciaActivity.class);
         startActivity(intent);
     }
 
+    @OnClick(R.id.btn_ir_nova_denuncia)
+    public void onClickNovaDenuncia(){
+        Intent intent = new Intent(this, CameraActivity.class);
+        startActivityForResult(intent, Constantes.REQUEST_CAMERA);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == Constantes.REQUEST_CAMERA){
+            if(resultCode == RESULT_OK){
+                filePath = data.getStringExtra("filePath");
+                Intent intent = new Intent(this, EscolheCategoriaActivity.class);
+                startActivity(intent);
+            }
+        }
+    }
 }

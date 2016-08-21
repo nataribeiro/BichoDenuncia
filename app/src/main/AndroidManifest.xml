@@ -17,17 +17,20 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name = "com.google.android.geo.API_KEY" android:value = "@string/google_maps_key" />
-        <meta-data android:name = "com.facebook.sdk.ApplicationId" android:value = "@string/facebook_app_id"/>
-
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:label="@string/app_name" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
         <activity
-            android:name="com.natanaelribeiro.bichodenuncia.MainActivity"
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -37,19 +40,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.natanaelribeiro.bichodenuncia.CameraActivity"
+            android:name=".CameraActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.natanaelribeiro.bichodenuncia.EscolheCategoriaActivity"
+            android:name=".EscolheCategoriaActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.natanaelribeiro.bichodenuncia.EscolheAnimalActivity"
+            android:name=".EscolheAnimalActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.natanaelribeiro.bichodenuncia.DetalhamentoDenunciaActivity"
+            android:name=".DetalhamentoDenunciaActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.natanaelribeiro.bichodenuncia.IdentificacaoActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".IdentificacaoActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DenunciaEnviadaActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DetalhesDenunciaActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PesquisarDenunciaActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ListaDenunciasActivity"></activity>
     </application>
 
 </manifest>

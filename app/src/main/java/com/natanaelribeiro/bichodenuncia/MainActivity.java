@@ -12,12 +12,13 @@ import android.view.View;
 import android.view.WindowManager;
 
 
+import com.natanaelribeiro.bichodenuncia.AppCode.Constantes;
+
 import butterknife.BindView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private String filePath;
-    private final int REQUEST_CAMERA = 1;
 
     @BindView(R.id.nav_view) public NavigationView nav_view;
 
@@ -31,8 +32,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ic_logo);
+        getSupportActionBar().setLogo(R.drawable.ic_logo);
 
         //TODO Tirar após finalizar login com Google
         //AccessToken.setCurrentAccessToken(null);
@@ -42,12 +42,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void onClickNovaDenuncia(View view) {
         Intent intent = new Intent(this, CameraActivity.class);
-        startActivityForResult(intent, REQUEST_CAMERA);
+        startActivityForResult(intent, Constantes.REQUEST_CAMERA);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQUEST_CAMERA){
+        if(requestCode == Constantes.REQUEST_CAMERA){
             if(resultCode == RESULT_OK){
                 filePath = data.getStringExtra("filePath");
                 Intent intent = new Intent(this, EscolheCategoriaActivity.class);

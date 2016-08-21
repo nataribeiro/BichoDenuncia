@@ -26,6 +26,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.natanaelribeiro.bichodenuncia.Custom.CircularImageView;
 import com.natanaelribeiro.bichodenuncia.Custom.ProfilePictureView;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -54,7 +55,7 @@ public class IdentificacaoActivity extends AppCompatActivity {
     @BindView(R.id.area_logado) public LinearLayout area_logado;
     @BindView(R.id.area_deslogado) public LinearLayout area_deslogado;
     @BindView(R.id.img_usuario) public ProfilePictureView img_usuario;
-    @BindView(R.id.img_usuario_google) public ImageView img_usuario_google;
+    @BindView(R.id.img_usuario_google) public CircularImageView img_usuario_google;
     @BindView(R.id.text_nome_usuario) public TextView text_nome_usuario;
 
     public static CallbackManager mCallbackManager;
@@ -112,8 +113,16 @@ public class IdentificacaoActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ic_logo);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_left_white_24dp);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setLogo(R.drawable.ic_logo);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         checkUserLoggedIn();
 
@@ -167,13 +176,15 @@ public class IdentificacaoActivity extends AppCompatActivity {
                         // On complete call either onLoginSuccess or onLoginFailed
                         try {
                             Thread.sleep(3000);
+                            Intent intent = new Intent(IdentificacaoActivity.this, DenunciaEnviadaActivity.class);
+                            startActivity(intent);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         // onLoginFailed();
                         progressDialog.dismiss();
                     }
-                }, 2000);
+                }, 1000);
 
 
     }

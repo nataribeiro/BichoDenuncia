@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:weightSum="8"
+    android:paddingLeft="@dimen/padding_horizontal"
+    android:paddingRight="@dimen/padding_horizontal"
+    android:background="@drawable/fundo"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_weight="2.25"
+        android:weightSum="3"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_weight="1"
+            android:text="POR DATA"
+            android:gravity="bottom"
+            android:textColor="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_weight="1"
+            android:gravity="top"
+            android:text="Selecione o período para consulta"
+            android:textColor="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:weightSum="4"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_weight="1"
+                android:text="de "
+                android:textColor="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:layout_weight="1"
+                android:id="@+id/date_from"
+                android:backgroundTint="@android:color/white"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_weight="1"
+                android:text=" à "
+                android:textColor="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:layout_weight="1"
+                android:id="@+id/date_to"
+                android:backgroundTint="@android:color/white"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="2.25"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_weight="1"
+            android:text="POR HASHTAGS"
+            android:gravity="bottom"
+            android:textColor="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_weight="1"
+            android:gravity="top"
+            android:text="Escreva abaixo as hashtags que deseja buscar"
+            android:textColor="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <EditText
+                android:id="@+id/edit_search_hashtags"
+                android:hint="#Hashtags"
+                android:backgroundTint="@android:color/white"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="3.5"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/btn_pesquisar_denuncias"
+            android:background="@android:color/transparent"
+            android:src="@drawable/pesquisar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>

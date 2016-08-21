@@ -11,6 +11,8 @@
     <LinearLayout
         android:paddingTop="50dp"
         android:layout_weight="2"
+        android:paddingLeft="@dimen/padding_horizontal"
+        android:paddingRight="@dimen/padding_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -28,6 +30,8 @@
         android:layout_weight="1"
         android:weightSum="1.5"
         android:visibility="visible"
+        android:paddingLeft="@dimen/padding_horizontal"
+        android:paddingRight="@dimen/padding_horizontal"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -61,7 +65,8 @@
         android:layout_weight="1"
         android:weightSum="3"
         android:background="@color/colorPrimary"
-        android:paddingLeft="30dp"
+        android:paddingLeft="@dimen/padding_horizontal"
+        android:paddingRight="@dimen/padding_horizontal"
         android:visibility="gone"
         android:id="@+id/area_logado"
         android:orientation="horizontal"
@@ -79,7 +84,7 @@
             android:layout_centerInParent="true"
             facebook:preset_size="small"/>
 
-        <ImageView
+        <com.natanaelribeiro.bichodenuncia.Custom.CircularImageView
             android:layout_weight="2"
             android:visibility="gone"
             android:layout_gravity="center_vertical"
@@ -104,6 +109,8 @@
         android:layout_weight="2"
         android:weightSum="3"
         android:orientation="vertical"
+        android:paddingLeft="@dimen/padding_horizontal"
+        android:paddingRight="@dimen/padding_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -144,6 +151,8 @@
 
     <LinearLayout
         android:layout_weight="2"
+        android:paddingLeft="@dimen/padding_horizontal"
+        android:paddingRight="@dimen/padding_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

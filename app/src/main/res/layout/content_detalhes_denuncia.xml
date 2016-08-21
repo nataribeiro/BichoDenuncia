@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/fundo"
+    android:weightSum="5"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/padding_horizontal"
+    android:paddingRight="@dimen/padding_horizontal"
+    android:paddingTop="@dimen/padding_vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:weightSum="3"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.natanaelribeiro.bichodenuncia.Custom.CircularImageView
+            android:layout_weight="1.85"
+            android:scaleType="fitXY"
+            android:layout_gravity="center"
+            android:src="@drawable/default_user"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_weight="1.15"
+            android:weightSum="2"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_weight="1"
+                android:text="Maus-tratos à cavalo"
+                android:textColor="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_weight="1"
+                android:text="15/08/2016 - 14:20h"
+                android:textColor="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="0.9"
+        android:paddingTop="20dp"
+        android:paddingBottom="@dimen/padding_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/txt_descricao_denuncia"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis id pretium odio. Morbi quis scelerisque eros. Quisque ullamcorper sit amet tortor a blandit. Phasellus tristique est est, a egestas velit volutpat sit amet. Integer sit amet urna mauris. Mauris ex mi, interdum sed ipsum eget, feugiat vehicula sapien. Morbi tincidunt egestas velit eget venenatis. Fusce vel pulvinar lorem. Maecenas non dui ut leo ultricies posuere. Nulla eleifend dolor et lacinia mollis. Donec dignissim varius massa, ac congue ex posuere quis. Sed a mauris nulla. Suspendisse dapibus molestie nisl, vel egestas nunc bibendum ut. Proin mollis condimentum tellus, quis pharetra elit sodales et."
+            android:textColor="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_weight="1.1"
+        android:weightSum="2"
+        android:paddingBottom="@dimen/padding_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/txt_hashtags_denuncia"
+            android:textColor="@android:color/white"
+            android:text="#CAVALO #CARROÇA #MAUSTRATOS #ABUSO"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Órgão responsável: "
+                android:textColor="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/txt_orgaos_denuncia"
+                android:text="EPTC e Brigada Militar"
+                android:textColor="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="0.9"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/padding_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:weightSum="10"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/img_status_denuncia"
+                android:layout_weight="9"
+                android:src="@drawable/amarelo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_weight="1"
+                android:text="EM ANDAMENTO 16/08/2016 - 15:30h"
+                android:id="@+id/txt_status_denuncia"
+                android:textColor="@color/yellow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/txt_retorno_denuncia"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis id pretium odio. Morbi quis scelerisque eros. - EPTC"
+            android:textColor="@color/yellow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="1.1"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingBottom="@dimen/padding_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:src="@drawable/pesquisar_denuncia"
+            android:background="@android:color/transparent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            android:src="@drawable/nova_denuncia2"
+            android:background="@android:color/transparent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>
