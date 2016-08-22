@@ -45,11 +45,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class IdentificacaoActivity extends AppCompatActivity {
+public class IdentificacaoActivity extends BaseActivity {
 
     @BindView(R.id.btn_logar_facebook) public ImageButton btn_logar_facebook;
     @BindView(R.id.btn_logar_google) public ImageButton btn_logar_google;
-    @BindView(R.id.sign_in_button) public SignInButton sign_in_button;
     @BindView(R.id.edit_email) public EditText edit_email;
     @BindView(R.id.edit_telefone) public EditText edit_telefone;
     @BindView(R.id.area_logado) public LinearLayout area_logado;
@@ -59,8 +58,6 @@ public class IdentificacaoActivity extends AppCompatActivity {
     @BindView(R.id.text_nome_usuario) public TextView text_nome_usuario;
 
     public static CallbackManager mCallbackManager;
-    private GoogleApiClient mGoogleApiClient;
-    private final int RC_SIGN_IN = 1;
     private ProgressDialog progressDialog;
 
 
@@ -99,30 +96,9 @@ public class IdentificacaoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_identificacao);
         ButterKnife.bind(this);
 
-        //Google SignIn configuration
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_left_white_24dp);
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().setLogo(R.drawable.ic_logo);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        setupGoogleSignIn();
+        setFullscreenActivity();
+        setupToolbar(true);
 
         checkUserLoggedIn();
 
@@ -136,27 +112,14 @@ public class IdentificacaoActivity extends AppCompatActivity {
         }
     }
 
-    public boolean isLoggedInFacebook() {
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        return accessToken != null;
-    }
-
-    public boolean isLoggedInGoogle(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isloggedIn = prefs.getBoolean("isloggedInGoogle", false);
-        return isloggedIn;
-    }
-
     @OnClick(R.id.btn_logar_facebook)
     public void onClickLogarFacebook() {
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+        logarFacebook();
     }
 
     @OnClick(R.id.btn_logar_google)
     public void onClickLogarGoogle() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-        //sign_in_button.callOnClick();
+        logarGoogle();
     }
 
     @OnClick(R.id.btn_enviar_denuncia)
@@ -200,12 +163,6 @@ public class IdentificacaoActivity extends AppCompatActivity {
                 return;
             }
         }
-    }
-
-    public Bitmap getFacebookProfilePicture(Uri imageUri) throws IOException {
-        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-
-        return bitmap;
     }
 
     private void handleFacebookSignIn(){

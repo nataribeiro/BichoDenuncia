@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:weightSum="8"
     android:background="@drawable/fundo"
     android:paddingLeft="@dimen/padding_horizontal"
     android:paddingRight="@dimen/padding_horizontal"
@@ -9,17 +10,21 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:layout_weight="3.25"
         android:orientation="vertical"
+        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/txt_tipo_busca"
             android:text="POR DATA"
             android:textColor="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/txt_conteudo_busca"
             android:text="de 10/08/2016 à 17/08/2016"
             android:textColor="@android:color/white"
             android:layout_width="match_parent"
@@ -27,6 +32,31 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_weight="1.5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <ListView
+            android:id="@+id/list_denuncias_busca"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="3.25"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/btn_ir_nova_denuncia"
+            android:src="@drawable/nova_denuncia"
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 </LinearLayout>

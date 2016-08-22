@@ -16,7 +16,7 @@ import com.natanaelribeiro.bichodenuncia.AppCode.Constantes;
 
 import butterknife.BindView;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity {
 
     private String filePath;
 
@@ -27,17 +27,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setLogo(R.drawable.ic_logo);
-
-        //TODO Tirar após finalizar login com Google
-        //AccessToken.setCurrentAccessToken(null);
-
-        //nav_view.setNavigationItemSelectedListener(this);
+        setFullscreenActivity();
+        setupToolbar(false);
+        getSupportActionBar().setTitle(R.string.app_name);
+        setupNavigationDrawer();
     }
 
     public void onClickNovaDenuncia(View view) {
@@ -54,24 +47,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent);
             }
         }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.nav_ultimas_denuncias){
-
-        } else if(id == R.id.nav_pesquisar_denuncia) {
-
-        } else if(id == R.id.nav_cadastrar_entidade){
-
-        } else if(id == R.id.nav_nova_denuncia){
-            Intent intent = new Intent(this, CameraActivity.class);
-            startActivityForResult(intent, 1);
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 }

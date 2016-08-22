@@ -14,7 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class EscolheAnimalActivity extends AppCompatActivity {
+public class EscolheAnimalActivity extends BaseActivity {
 
     private String categoria;
     private Constantes.eAnimal animal;
@@ -29,21 +29,8 @@ public class EscolheAnimalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_escolhe_animal);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_left_white_24dp);
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().setLogo(R.drawable.ic_logo);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        setFullscreenActivity();
+        setupToolbar(true);
 
         ButterKnife.bind(this);
 

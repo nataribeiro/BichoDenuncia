@@ -18,7 +18,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PesquisarDenunciaActivity extends AppCompatActivity implements View.OnClickListener {
+public class PesquisarDenunciaActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.date_from) public EditText date_from;
     @BindView(R.id.date_to) public EditText date_to;
@@ -36,21 +36,8 @@ public class PesquisarDenunciaActivity extends AppCompatActivity implements View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pesquisar_denuncia);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_left_white_24dp);
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().setLogo(R.drawable.ic_logo);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        setFullscreenActivity();
+        setupToolbar(true);
 
         ButterKnife.bind(this);
 

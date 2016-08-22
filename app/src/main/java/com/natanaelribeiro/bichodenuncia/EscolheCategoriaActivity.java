@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 /**
  * Created by 631610277 on 06/08/16.
  */
-public class EscolheCategoriaActivity extends AppCompatActivity {
+public class EscolheCategoriaActivity extends BaseActivity {
 
     @BindView(R.id.txtCategoria) public TextView txtCategoria;
 
@@ -28,21 +28,8 @@ public class EscolheCategoriaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_escolhe_categoria);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_white_24dp);
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().setLogo(R.drawable.ic_logo);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        setFullscreenActivity();
+        setupToolbar(true);
 
         ButterKnife.bind(this);
         //txtCategoria.setTypeface(Typeface.createFromAsset(getAssets(), "Roboto-Bold.ttf"));
