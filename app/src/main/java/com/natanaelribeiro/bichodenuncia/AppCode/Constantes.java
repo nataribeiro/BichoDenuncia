@@ -7,7 +7,7 @@ public class Constantes {
 
     public static final String ANIMAIS_DOMESTICOS = "domesticos";
     public static final String ANIMAIS_SELVAGENS = "selvagens";
-    public static final int REQUEST_CAMERA = 1;
+    public static final int REQUEST_CAMERA = 100;
 
     public enum eAnimal {
         gato,

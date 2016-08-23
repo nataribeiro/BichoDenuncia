@@ -86,8 +86,8 @@ public class CircularImageView extends ImageView {
         paint.setDither(true);
         canvas.drawARGB(0, 0, 0, 0);
         paint.setColor(Color.parseColor("#BAB399"));
-        canvas.drawCircle(sbmp.getWidth() / 2.58f+1.1f, sbmp.getHeight() / 2.58f+1.1f,
-                sbmp.getWidth() / 2.58f+0.5f, paint);
+        canvas.drawCircle(sbmp.getWidth() / 2.5f+1.1f, sbmp.getHeight() / 2.5f+1.1f,
+                sbmp.getWidth() / 2.5f+0.5f, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(sbmp, rect, rect, paint);
 

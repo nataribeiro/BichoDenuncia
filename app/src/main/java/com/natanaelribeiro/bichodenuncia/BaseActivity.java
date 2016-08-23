@@ -1,6 +1,5 @@
 package com.natanaelribeiro.bichodenuncia;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -16,17 +15,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.natanaelribeiro.bichodenuncia.Custom.CircularImageView;
 import com.natanaelribeiro.bichodenuncia.Custom.ProfilePictureView;
 
@@ -39,6 +47,8 @@ import java.util.Arrays;
 public class BaseActivity extends AppCompatActivity {
     protected DrawerLayout drawerLayout;
     protected GoogleApiClient mGoogleApiClient;
+    public static CallbackManager mCallbackManager;
+    NavigationView navigationView;
     protected final int RC_SIGN_IN = 1;
 
     protected void setupToolbar(boolean bCarregaBotaoVoltar) {
@@ -61,6 +71,35 @@ public class BaseActivity extends AppCompatActivity {
                 });
             }
         }
+    }
+
+    protected void setupFacebookSigIn() {
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        mCallbackManager = CallbackManager.Factory.create();
+
+        LoginManager.getInstance().registerCallback(mCallbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        AccessToken accessToken = loginResult.getAccessToken();
+                        setNavViewValues(navigationView);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Toast.makeText(getBaseContext(), "Login Cancel", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        String sErro = "";
+                        if (exception.getMessage().contains("CONNECTION_FAILURE"))
+                            sErro = "Sem conexão com a internet";
+                        else
+                            sErro = exception.getMessage();
+                        Toast.makeText(getBaseContext(), sErro, Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     protected void setupGoogleSignIn() {
@@ -86,7 +125,7 @@ public class BaseActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         if(navigationView != null && drawerLayout != null) {
             //Atualiza header
             setNavViewValues(navigationView);
@@ -109,12 +148,14 @@ public class BaseActivity extends AppCompatActivity {
     private void onNavDrawerItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_ultimas_denuncias: {
+                Intent intent = new Intent(getBaseContext(), ListaDenunciasActivity.class);
+                intent.putExtra("tipo_busca", "ultimas");
+                startActivity(intent);
                 break;
             }
             case R.id.nav_pesquisar_denuncia: {
-                break;
-            }
-            case R.id.nav_cadastrar_entidade: {
+                Intent intent = new Intent(getBaseContext(), PesquisarDenunciaActivity.class);
+                startActivity(intent);
                 break;
             }
             case R.id.nav_nova_denuncia: {
@@ -122,15 +163,27 @@ public class BaseActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1);
                 break;
             }
+            case R.id.nav_logoff: {
+                if(isLoggedInFacebook()){
+                    logoutFacebook();
+                    setNavViewValues(navigationView);
+                } else if(isLoggedInGoogle()) {
+                    logoutGoogle();
+                    setNavViewValues(navigationView);
+                }
+                break;
+            }
         }
     }
 
     void setNavViewValues(NavigationView navView) {
         View headerView = navView.getHeaderView(0);
+        MenuItem nav_logoff = navView.getMenu().findItem(R.id.nav_logoff);
+        LinearLayout area_logado = (LinearLayout) headerView.findViewById(R.id.area_logado);
+        LinearLayout area_deslogado = (LinearLayout) headerView.findViewById(R.id.area_deslogado);
 
         if(isLoggedInFacebook()) {
-            LinearLayout area_logado = (LinearLayout) headerView.findViewById(R.id.area_logado);
-            LinearLayout area_deslogado = (LinearLayout) headerView.findViewById(R.id.area_deslogado);
+            nav_logoff.setVisible(true);
             area_logado.setVisibility(View.VISIBLE);
             area_deslogado.setVisibility(View.GONE);
 
@@ -146,7 +199,33 @@ public class BaseActivity extends AppCompatActivity {
             TextView txt_nome_usuario = (TextView) headerView.findViewById(R.id.txt_nome_usuario);
             txt_nome_usuario.setText(profile.getFirstName() + " " + profile.getLastName());
         } else if(isLoggedInGoogle()) {
+            nav_logoff.setVisible(true);
             logarGoogle();
+        } else {
+            nav_logoff.setVisible(false);
+            area_logado.setVisibility(View.GONE);
+            area_deslogado.setVisibility(View.VISIBLE);
+            //Login Facebook
+            ImageButton btnFacebook = (ImageButton) headerView.findViewById(R.id.btn_logar_facebook);
+            if (btnFacebook != null) {
+                btnFacebook.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        logarFacebook();
+                    }
+                });
+            }
+
+            //Login Google
+            ImageButton btnGoogle = (ImageButton) headerView.findViewById(R.id.btn_logar_google);
+            if (btnGoogle != null) {
+                btnGoogle.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        logarGoogle();
+                    }
+                });
+            }
         }
     }
 
@@ -196,24 +275,57 @@ public class BaseActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            LinearLayout area_logado = (LinearLayout) findViewById(R.id.area_logado);
-            LinearLayout area_deslogado = (LinearLayout) findViewById(R.id.area_deslogado);
-            area_logado.setVisibility(View.VISIBLE);
-            area_deslogado.setVisibility(View.GONE);
-
-            GoogleSignInAccount acct = result.getSignInAccount();
-            TextView txt_nome_usuario = (TextView) findViewById(R.id.txt_nome_usuario);
-            txt_nome_usuario.setText(acct.getDisplayName());
-            CircularImageView img_usuario_google = (CircularImageView) findViewById(R.id.img_usuario_google);
-            img_usuario_google.setVisibility(View.VISIBLE);
-            if(acct.getPhotoUrl() == null)
-                img_usuario_google.setImageResource(R.drawable.default_user);
-            else
-                img_usuario_google.setImageURI(acct.getPhotoUrl());
+    public void logoutGoogle() {
+        try {
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                    new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(Status status) {
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                            prefs.edit().putBoolean("isloggedInGoogle", false).commit();
+                        }
+                    });
+        }
+        catch(Exception e) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+            prefs.edit().putBoolean("isloggedInGoogle", false).commit();
         }
     }
+
+    public void logoutFacebook() {
+        LoginManager.getInstance().logOut();
+    }
+
+    protected void onBaseActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_SIGN_IN) {
+            if(navigationView != null) {
+                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+                if(result.isSuccess()) {
+                    View headerView = navigationView.getHeaderView(0);
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                    prefs.edit().putBoolean("isloggedInGoogle", true).commit();
+
+                    LinearLayout area_logado = (LinearLayout) headerView.findViewById(R.id.area_logado);
+                    LinearLayout area_deslogado = (LinearLayout) headerView.findViewById(R.id.area_deslogado);
+                    area_logado.setVisibility(View.VISIBLE);
+                    area_deslogado.setVisibility(View.GONE);
+
+                    GoogleSignInAccount acct = result.getSignInAccount();
+                    TextView txt_nome_usuario = (TextView) headerView.findViewById(R.id.txt_nome_usuario);
+                    txt_nome_usuario.setText(acct.getDisplayName());
+                    CircularImageView img_usuario_google = (CircularImageView) headerView.findViewById(R.id.img_usuario_google);
+                    img_usuario_google.setVisibility(View.VISIBLE);
+                    if (acct.getPhotoUrl() == null)
+                        img_usuario_google.setImageResource(R.drawable.default_user);
+                    else
+                        img_usuario_google.setImageURI(acct.getPhotoUrl());
+                }
+                else {
+                    logoutGoogle();
+                }
+            }
+        }
+    }
+
+
 }

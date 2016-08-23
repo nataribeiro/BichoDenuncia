@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.WindowManager;
 
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
 import com.natanaelribeiro.bichodenuncia.AppCode.Constantes;
 
 import butterknife.BindView;
@@ -25,7 +27,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setupFacebookSigIn();
+        setContentView(R.layout.activity_base);
+        setupGoogleSignIn();
 
         setFullscreenActivity();
         setupToolbar(false);
@@ -45,6 +49,13 @@ public class MainActivity extends BaseActivity {
                 filePath = data.getStringExtra("filePath");
                 Intent intent = new Intent(this, EscolheCategoriaActivity.class);
                 startActivity(intent);
+            }
+        } else if(requestCode == RC_SIGN_IN){
+            onBaseActivityResult(requestCode, resultCode, data);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (mCallbackManager.onActivityResult(requestCode, resultCode, data)) {
+                return;
             }
         }
     }

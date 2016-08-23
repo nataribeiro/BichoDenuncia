@@ -10,11 +10,11 @@
         android:title="Pesquisar Denúncias"/>
 
     <item
-        android:id="@+id/nav_cadastrar_entidade"
-        android:title="Cadastrar Entidade"/>
-
-    <item
         android:id="@+id/nav_nova_denuncia"
         android:title="Nova Denúncia"/>
+
+    <item
+        android:id="@+id/nav_logoff"
+        android:title="Logoff"/>
 
 </menu>

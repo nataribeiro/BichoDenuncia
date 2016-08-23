@@ -539,6 +539,8 @@ public class ProfilePictureView extends FrameLayout {
         final RectF rectF = new RectF(rect);
 
         paint.setAntiAlias(true);
+        paint.setFilterBitmap(true);
+        paint.setDither(true);
         canvas.drawARGB(0, 0, 0, 0);
         paint.setColor(color);
         canvas.drawOval(rectF, paint);
