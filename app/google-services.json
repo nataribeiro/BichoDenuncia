@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "89921736205",
+    "firebase_url": "https://bicho-denuncia.firebaseio.com",
+    "project_id": "bicho-denuncia",
+    "storage_bucket": "bicho-denuncia.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89921736205:android:14b4976e042f7985",
+        "android_client_info": {
+          "package_name": "com.natanaelribeiro.bichodenuncia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "89921736205-5089ro7k69u1l4jpbhvg25hsh3dh3kac.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.natanaelribeiro.bichodenuncia",
+            "certificate_hash": "3D2DC8F4BCC3840EBC5F0627E683861E36C2F690"
+          }
+        },
+        {
+          "client_id": "89921736205-etjh8b3bs4ho85ddjg4dak15lav1m11a.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "89921736205-ku0kq3aq0mnsa6uj9l9d1bkhtqkemeof.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNhtNe9MFBss-O2WcC5VG4tK8RTc4YAyY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "89921736205-etjh8b3bs4ho85ddjg4dak15lav1m11a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

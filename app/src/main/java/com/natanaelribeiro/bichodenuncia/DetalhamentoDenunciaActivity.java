@@ -9,6 +9,7 @@ import android.location.Location;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -55,6 +57,13 @@ public class DetalhamentoDenunciaActivity extends BaseActivity implements OnMapR
     private GoogleApiClient mGoogleApiClient;
     private Marker markerMyLocation;
 
+    private String filePath;
+    private String fileType;
+    private String categoria;
+    private String animal;
+    private double loc_latitude;
+    private double loc_longitude;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,14 +74,46 @@ public class DetalhamentoDenunciaActivity extends BaseActivity implements OnMapR
 
         ButterKnife.bind(this);
 
+        carregaExtras();
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
+    private void carregaExtras(){
+        filePath = getIntent().getStringExtra("filePath");
+        fileType = getIntent().getStringExtra("fileType");
+        categoria = getIntent().getStringExtra("categoria");
+        animal = getIntent().getStringExtra("animal");
+    }
+
     @OnClick(R.id.btn_continuar_para_identificacao)
     public void onClickContinuar(){
-        Intent intent = new Intent(this, IdentificacaoActivity.class);
-        startActivity(intent);
+        if(verificaInfoObrigatorio()) {
+            Intent intent = new Intent(this, IdentificacaoActivity.class);
+
+            intent.putExtra("filePath", filePath);
+            intent.putExtra("fileType", fileType);
+            intent.putExtra("categoria", categoria);
+            intent.putExtra("animal", animal);
+            intent.putExtra("descricao", edit_descricao_denuncia.getText().toString());
+            intent.putExtra("hashtags", edit_hashtags.getText().toString());
+            intent.putExtra("endereco", edit_localizacao.getText().toString());
+            intent.putExtra("loc_latitude", loc_latitude);
+            intent.putExtra("loc_longitude", loc_longitude);
+
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean verificaInfoObrigatorio() {
+        if(!edit_descricao_denuncia.getText().toString().equals("") &&
+                !edit_hashtags.getText().toString().equals("") &&
+                !edit_localizacao.getText().toString().equals(""))
+            return true;
+        return false;
     }
 
     @Override
@@ -130,6 +171,8 @@ public class DetalhamentoDenunciaActivity extends BaseActivity implements OnMapR
 
         try {
             addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            loc_latitude = location.getLatitude();
+            loc_longitude = location.getLongitude();
             String endereco = addresses.get(0).getAddressLine(0);
             String cidade = addresses.get(0).getLocality();
             String estado = addresses.get(0).getAdminArea();

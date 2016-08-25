@@ -15,6 +15,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import com.natanaelribeiro.bichodenuncia.AppCode.Constantes;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -28,18 +30,17 @@ import butterknife.OnClick;
 
 public class CameraActivity extends BaseActivity {
 
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
     private Camera mCamera;
     private CameraPreview mPreview;
     private MediaRecorder mRecorder;
 
+    private int fileType;
     private File pictureFile;
     private byte[] dataFile;
 
     @BindView(R.id.btn_capture_image) public ImageButton btn_capture_image;
     @BindView(R.id.btn_start_video) public ImageButton btn_start_video;
-    @BindView(R.id.btn_stop_video) public Button btn_stop_video;
+    @BindView(R.id.btn_stop_video) public ImageButton btn_stop_video;
     @BindView(R.id.cam_botoes_acao) public LinearLayout cam_botoes_acao;
     @BindView(R.id.cam_botoes_confirmacao) public LinearLayout cam_botoes_confirmacao;
 
@@ -84,7 +85,7 @@ public class CameraActivity extends BaseActivity {
     Camera.PictureCallback mPicture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+            pictureFile = getOutputMediaFile(Constantes.MEDIA_TYPE_IMAGE);
             if(pictureFile == null){
                 Log.d("TakePicture", "Error creating media file, check storage permissions");
                 return;
@@ -114,10 +115,10 @@ public class CameraActivity extends BaseActivity {
         // Create a media file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE){
+        if (type == Constantes.MEDIA_TYPE_IMAGE){
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
                     "IMG_"+ timeStamp + ".jpg");
-        } else if(type == MEDIA_TYPE_VIDEO) {
+        } else if(type == Constantes.MEDIA_TYPE_VIDEO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
                     "VID_"+ timeStamp + ".mp4");
         } else {
@@ -129,6 +130,7 @@ public class CameraActivity extends BaseActivity {
 
     @OnClick(R.id.btn_capture_image)
     public void onClickTirarFoto() {
+        fileType = Constantes.MEDIA_TYPE_IMAGE;
         mCamera.takePicture(null, null, mPicture);
         habilitaBotoesConfirmacao();
     }
@@ -154,7 +156,7 @@ public class CameraActivity extends BaseActivity {
 
         mRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
 
-        mRecorder.setOutputFile(getOutputMediaFile(MEDIA_TYPE_VIDEO).toString());
+        mRecorder.setOutputFile(getOutputMediaFile(Constantes.MEDIA_TYPE_VIDEO).toString());
 
         mRecorder.setPreviewDisplay(mPreview.getHolder().getSurface());
 
@@ -174,6 +176,7 @@ public class CameraActivity extends BaseActivity {
     }
 
     public void onClickFilmar(View view) throws IOException {
+        fileType = Constantes.MEDIA_TYPE_VIDEO;
         mCamera.setPreviewDisplay(mPreview.getHolder());
         if(prepareMediaRecorder()){
             try {
@@ -209,8 +212,10 @@ public class CameraActivity extends BaseActivity {
         }
 
         Intent resultIntent = new Intent();
+        resultIntent.putExtra("fileType", fileType);
         resultIntent.putExtra("filePath", pictureFile.getPath());
         this.setResult(RESULT_OK, resultIntent);
+
         finish();
     }
 

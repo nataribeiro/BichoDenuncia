@@ -15,15 +15,16 @@ import com.natanaelribeiro.bichodenuncia.R;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import io.realm.RealmResults;
 
 /**
  * Created by natanaelribeiro on 21/08/16.
  */
 public class ListaDenunciasAdapter extends BaseAdapter {
-    List<Denuncia> denuncias;
+    RealmResults<Denuncia> denuncias;
     Context contexto;
 
-    public ListaDenunciasAdapter(Context contexto, List<Denuncia> denuncias){
+    public ListaDenunciasAdapter(Context contexto, RealmResults<Denuncia> denuncias){
         this.contexto = contexto;
         this.denuncias = denuncias;
     }

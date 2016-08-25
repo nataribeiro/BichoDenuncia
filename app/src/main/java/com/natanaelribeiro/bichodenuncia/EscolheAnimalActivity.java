@@ -16,6 +16,8 @@ import butterknife.OnClick;
 
 public class EscolheAnimalActivity extends BaseActivity {
 
+    private String filePath;
+    private String fileType;
     private String categoria;
     private Constantes.eAnimal animal;
 
@@ -34,6 +36,8 @@ public class EscolheAnimalActivity extends BaseActivity {
 
         ButterKnife.bind(this);
 
+        filePath = getIntent().getStringExtra("filePath");
+        fileType = getIntent().getStringExtra("fileType");
         categoria = getIntent().getStringExtra("categoria");
 
         if(categoria.equals(Constantes.ANIMAIS_DOMESTICOS)){
@@ -46,7 +50,7 @@ public class EscolheAnimalActivity extends BaseActivity {
             imagebutton3.setImageResource(R.drawable.cavalo);
             imagebutton3.setContentDescription(getString(R.string.texto_cavalo));
 
-            imagebutton4.setImageResource(R.drawable.roedor);
+            imagebutton4.setImageResource(R.drawable.roedor_domestico);
             imagebutton4.setContentDescription(getString(R.string.texto_roedor));
         }
         else if(categoria.equals(Constantes.ANIMAIS_SELVAGENS)){
@@ -56,7 +60,7 @@ public class EscolheAnimalActivity extends BaseActivity {
             imagebutton2.setImageResource(R.drawable.ave);
             imagebutton2.setContentDescription(getString(R.string.texto_ave));
 
-            imagebutton3.setImageResource(R.drawable.roedor2);
+            imagebutton3.setImageResource(R.drawable.roedor_selvagem);
             imagebutton3.setContentDescription(getString(R.string.texto_roedor));
 
             imagebutton4.setImageResource(R.drawable.marinho);
@@ -102,6 +106,9 @@ public class EscolheAnimalActivity extends BaseActivity {
 
     private void NextActivity(Constantes.eAnimal animal) {
         Intent intent = new Intent(this, DetalhamentoDenunciaActivity.class);
+        intent.putExtra("filePath", filePath);
+        intent.putExtra("fileType", fileType);
+        intent.putExtra("categoria", categoria);
         intent.putExtra("animal", animal.toString());
         startActivity(intent);
     }

@@ -1,6 +1,7 @@
 package com.natanaelribeiro.bichodenuncia;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -17,11 +19,13 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class PesquisarDenunciaActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.date_from) public EditText date_from;
     @BindView(R.id.date_to) public EditText date_to;
+    @BindView(R.id.edit_search_hashtags) public EditText edit_search_hashtags;
     @BindView(R.id.btn_pesquisar_denuncias) public ImageButton btn_pesquisar_denuncias;
 
     final Locale brasilLocale = new Locale("pt", "BR");
@@ -80,6 +84,21 @@ public class PesquisarDenunciaActivity extends BaseActivity implements View.OnCl
             fromDatePickerDialog.show();
         } else if(view == date_to) {
             toDatePickerDialog.show();
+        }
+    }
+
+    @OnClick(R.id.btn_pesquisar_denuncias)
+    public void onClickPesquisar() {
+        Intent intent = new Intent(this, ListaDenunciasActivity.class);
+        if(!date_from.equals("") && !date_to.equals("")) {
+            intent.putExtra("tipo_busca", "data");
+            intent.putExtra("data_inicio", date_from.getText().toString());
+            intent.putExtra("data_fim", date_to.getText().toString());
+        } else if(!edit_search_hashtags.equals((""))){
+            intent.putExtra("tipo_busca", "hashtag");
+            intent.putExtra("filtro", edit_search_hashtags.getText().toString());
+        } else {
+            Toast.makeText(this, "Insira um filtro para pesquisa", Toast.LENGTH_SHORT).show();
         }
     }
 

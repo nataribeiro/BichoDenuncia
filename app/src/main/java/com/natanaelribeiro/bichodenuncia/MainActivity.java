@@ -21,6 +21,7 @@ import butterknife.BindView;
 public class MainActivity extends BaseActivity {
 
     private String filePath;
+    private String fileType;
 
     @BindView(R.id.nav_view) public NavigationView nav_view;
 
@@ -46,8 +47,15 @@ public class MainActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == Constantes.REQUEST_CAMERA){
             if(resultCode == RESULT_OK){
+                int type = data.getIntExtra("fileType", 0);
+                if(type == Constantes.MEDIA_TYPE_IMAGE)
+                    fileType = "I";
+                else
+                    fileType = "V";
                 filePath = data.getStringExtra("filePath");
                 Intent intent = new Intent(this, EscolheCategoriaActivity.class);
+                intent.putExtra("filePath", filePath);
+                intent.putExtra("fileType", fileType);
                 startActivity(intent);
             }
         } else if(requestCode == RC_SIGN_IN){

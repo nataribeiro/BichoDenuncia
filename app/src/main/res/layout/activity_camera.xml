@@ -50,11 +50,11 @@
                 android:layout_gravity="center"
                 android:translationZ="100dp" />
 
-            <Button
+            <ImageButton
                 android:visibility="gone"
                 android:layout_weight="2"
                 android:id="@+id/btn_stop_video"
-                android:text="Stop"
+                android:src="@drawable/stop_video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -72,17 +72,18 @@
             android:layout_gravity="center|bottom"
             android:translationZ="5dp">
 
-            <Button
+            <ImageButton
                 android:layout_weight="1"
-                android:text="OK"
+                android:src="@drawable/confirmar_captura"
                 android:id="@+id/btn_confirma_captura"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:translationZ="7dp" />
 
-            <Button
+            <ImageButton
                 android:layout_weight="1"
+                android:src="@drawable/cancelar"
                 android:id="@+id/btn_cancela_captura"
                 android:text="X"
                 android:layout_width="wrap_content"

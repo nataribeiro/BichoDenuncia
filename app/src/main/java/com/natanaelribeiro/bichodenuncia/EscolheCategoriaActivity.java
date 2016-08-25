@@ -22,6 +22,8 @@ import butterknife.ButterKnife;
 public class EscolheCategoriaActivity extends BaseActivity {
 
     @BindView(R.id.txtCategoria) public TextView txtCategoria;
+    private String filePath;
+    private String fileType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,9 @@ public class EscolheCategoriaActivity extends BaseActivity {
         setupToolbar(true);
 
         ButterKnife.bind(this);
+
+        filePath = getIntent().getStringExtra("filePath");
+        fileType = getIntent().getStringExtra("fileType");
         //txtCategoria.setTypeface(Typeface.createFromAsset(getAssets(), "Roboto-Bold.ttf"));
     }
 
@@ -45,6 +50,8 @@ public class EscolheCategoriaActivity extends BaseActivity {
 
     private void NextActivity(String categoria){
         Intent intent = new Intent(this, EscolheAnimalActivity.class);
+        intent.putExtra("filePath", filePath);
+        intent.putExtra("fileType", fileType);
         intent.putExtra("categoria", categoria);
         startActivity(intent);
     }

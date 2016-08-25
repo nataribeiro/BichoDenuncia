@@ -4,10 +4,12 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by natanaelribeiro on 21/08/16.
+ * Created by natanaelribeiro on 23/08/16.
  */
-public class Hashtag extends RealmObject {
+public class Midia extends RealmObject {
     @PrimaryKey
     public int id;
-    public String hashtag;
+    public int sequencia;
+    public String tipo_midia;
+    public String arquivo;
 }
