@@ -27,6 +27,7 @@
         android:layout_weight="1"
         android:weightSum="2"
         android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -34,38 +35,47 @@
         <ImageButton
             android:background="@android:color/transparent"
             android:layout_weight="1"
+            android:src="@drawable/gato"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/imagebutton1" />
+            android:layout_height="wrap_content"
+            android:id="@+id/imagebutton1"
+            android:scaleType="fitCenter" />
 
         <ImageButton
             android:background="@android:color/transparent"
             android:layout_weight="1"
+            android:src="@drawable/cachorro"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/imagebutton2" />
+            android:layout_height="wrap_content"
+            android:id="@+id/imagebutton2"
+            android:scaleType="fitCenter"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_weight="1"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageButton
             android:background="@android:color/transparent"
             android:layout_weight="1"
+            android:src="@drawable/cavalo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/imagebutton3" />
+            android:layout_height="wrap_content"
+            android:id="@+id/imagebutton3"
+            android:scaleType="fitCenter"/>
 
         <ImageButton
             android:background="@android:color/transparent"
             android:layout_weight="1"
+            android:src="@drawable/roedor_domestico"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/imagebutton4" />
+            android:layout_height="wrap_content"
+            android:id="@+id/imagebutton4"
+            android:scaleType="fitCenter"/>
 
     </LinearLayout>
 
@@ -73,6 +83,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_weight="1"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -82,7 +93,8 @@
             android:background="@android:color/transparent"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"/>
 
     </LinearLayout>
 

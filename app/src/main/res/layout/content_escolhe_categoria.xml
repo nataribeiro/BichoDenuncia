@@ -26,6 +26,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:scaleType="fitCenter"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:onClick="onClickAnimaisDomesticos"
         android:contentDescription="@string/texto_animais_domesticos" />
 
@@ -37,6 +38,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:onClick="onClickAnimaisSelvagens"
         android:contentDescription="@string/texto_animais_selvagens" />
 

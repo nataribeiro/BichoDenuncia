@@ -1,4 +1,4 @@
-package com.natanaelribeiro.bichodenuncia.AppCode.Estrutura;
+package com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Service;
 
 /**
  * Created by natanaelribeiro on 24/08/16.

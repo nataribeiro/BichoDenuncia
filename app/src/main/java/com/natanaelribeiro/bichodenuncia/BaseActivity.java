@@ -3,6 +3,7 @@ package com.natanaelribeiro.bichodenuncia;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,8 +37,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.natanaelribeiro.bichodenuncia.AppCode.Constantes;
 import com.natanaelribeiro.bichodenuncia.Custom.CircularImageView;
 import com.natanaelribeiro.bichodenuncia.Custom.ProfilePictureView;
+import com.natanaelribeiro.bichodenuncia.Custom.RoundImage;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -46,6 +50,7 @@ import java.util.Arrays;
  */
 public class BaseActivity extends AppCompatActivity {
     protected DrawerLayout drawerLayout;
+    RoundImage roundedImage;
     protected GoogleApiClient mGoogleApiClient;
     public static CallbackManager mCallbackManager;
     NavigationView navigationView;
@@ -160,7 +165,7 @@ public class BaseActivity extends AppCompatActivity {
             }
             case R.id.nav_nova_denuncia: {
                 Intent intent = new Intent(getBaseContext(), CameraActivity.class);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, Constantes.REQUEST_CAMERA);
                 break;
             }
             case R.id.nav_logoff: {
@@ -313,12 +318,22 @@ public class BaseActivity extends AppCompatActivity {
                     GoogleSignInAccount acct = result.getSignInAccount();
                     TextView txt_nome_usuario = (TextView) headerView.findViewById(R.id.txt_nome_usuario);
                     txt_nome_usuario.setText(acct.getDisplayName());
-                    CircularImageView img_usuario_google = (CircularImageView) headerView.findViewById(R.id.img_usuario_google);
-                    img_usuario_google.setVisibility(View.VISIBLE);
+
+                    ImageView img_usuario_google = (ImageView) headerView.findViewById(R.id.img_usuario_google) ;
+
+                    Bitmap bm;
                     if (acct.getPhotoUrl() == null)
-                        img_usuario_google.setImageResource(R.drawable.default_user);
+                        bm = BitmapFactory.decodeResource(getResources(),R.drawable.default_user);
                     else
-                        img_usuario_google.setImageURI(acct.getPhotoUrl());
+                        try {
+                            bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(),acct.getPhotoUrl());
+                        } catch (IOException e) {
+                            bm = BitmapFactory.decodeResource(getResources(),R.drawable.default_user);
+                        }
+
+                    roundedImage = new RoundImage(bm);
+                    img_usuario_google.setImageDrawable(roundedImage);
+                    img_usuario_google.setVisibility(View.VISIBLE);
                 }
                 else {
                     logoutGoogle();

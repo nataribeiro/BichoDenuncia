@@ -94,9 +94,11 @@ public class PesquisarDenunciaActivity extends BaseActivity implements View.OnCl
             intent.putExtra("tipo_busca", "data");
             intent.putExtra("data_inicio", date_from.getText().toString());
             intent.putExtra("data_fim", date_to.getText().toString());
+            startActivity(intent);
         } else if(!edit_search_hashtags.equals((""))){
-            intent.putExtra("tipo_busca", "hashtag");
+            intent.putExtra("tipo_busca", "dbHashtag");
             intent.putExtra("filtro", edit_search_hashtags.getText().toString());
+            startActivity(intent);
         } else {
             Toast.makeText(this, "Insira um filtro para pesquisa", Toast.LENGTH_SHORT).show();
         }

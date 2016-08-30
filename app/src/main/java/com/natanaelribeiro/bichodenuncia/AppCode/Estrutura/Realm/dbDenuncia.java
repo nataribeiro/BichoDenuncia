@@ -1,10 +1,4 @@
-package com.natanaelribeiro.bichodenuncia.AppCode.Estrutura;
-
-import android.text.format.DateFormat;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+package com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Realm;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -13,7 +7,7 @@ import io.realm.annotations.PrimaryKey;
 /**
  * Created by natanaelribeiro on 21/08/16.
  */
-public class Denuncia extends RealmObject {
+public class dbDenuncia extends RealmObject {
     @PrimaryKey
     public int id;
     public int id_server;
@@ -29,14 +23,14 @@ public class Denuncia extends RealmObject {
     public String denunciante_email;
     public String denunciante_telefone;
     public String id_dispositivo;
-    public RealmList<Hashtag> hashtag;
-    public RealmList<Midia> midia;
-    public RealmList<Retorno> retorno;
+    public RealmList<dbHashtag> dbHashtag;
+    public RealmList<dbMidia> dbMidia;
+    public RealmList<dbRetorno> dbRetorno;
 
-    public Denuncia(){
-        this.hashtag = new RealmList();
-        this.midia = new RealmList();
-        this.retorno = new RealmList();
+    public dbDenuncia(){
+        this.dbHashtag = new RealmList();
+        this.dbMidia = new RealmList();
+        this.dbRetorno = new RealmList();
     }
 
     @Override

@@ -6,43 +6,31 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.natanaelribeiro.bichodenuncia.AppCode.CoreApplication;
-import com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Denuncia;
-import com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Hashtag;
-import com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Midia;
-import com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.ResultadoOperacao;
+import com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Realm.dbDenuncia;
+import com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Service.Denuncia;
+import com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Service.Hashtag;
+import com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Service.Midia;
+import com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Service.ResultadoOperacao;
 import com.natanaelribeiro.bichodenuncia.AppCode.IRetrofit;
-import com.natanaelribeiro.bichodenuncia.Custom.CircularImageView;
+import com.natanaelribeiro.bichodenuncia.AppCode.ServiceGenerator;
 import com.natanaelribeiro.bichodenuncia.Custom.ProfilePictureView;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -52,12 +40,14 @@ import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.natanaelribeiro.bichodenuncia.Custom.RoundImage;
 
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -68,8 +58,6 @@ import io.realm.RealmList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class IdentificacaoActivity extends BaseActivity {
 
@@ -80,10 +68,11 @@ public class IdentificacaoActivity extends BaseActivity {
     @BindView(R.id.area_logado) public LinearLayout area_logado;
     @BindView(R.id.area_deslogado) public LinearLayout area_deslogado;
     @BindView(R.id.img_usuario) public ProfilePictureView img_usuario;
-    @BindView(R.id.img_usuario_google) public CircularImageView img_usuario_google;
+    @BindView(R.id.img_usuario_google) public ImageView img_usuario_google;
     @BindView(R.id.text_nome_usuario) public TextView text_nome_usuario;
 
     private Denuncia denuncia;
+    private dbDenuncia db_denuncia;
 
     public IRetrofit service;
     public static CallbackManager mCallbackManager;
@@ -122,11 +111,12 @@ public class IdentificacaoActivity extends BaseActivity {
                 });
 
         setContentView(R.layout.activity_identificacao);
-        ButterKnife.bind(this);
 
         setupGoogleSignIn();
         setFullscreenActivity();
         setupToolbar(true);
+
+        ButterKnife.bind(this);
 
         checkUserLoggedIn();
         carregaExtras();
@@ -143,6 +133,10 @@ public class IdentificacaoActivity extends BaseActivity {
 
         denuncia = new Denuncia();
 
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String strDate = sdf.format(new Date());
+
+        denuncia.data = strDate;
         Midia midia = new Midia();
         midia.arquivo = sImagemArray;
         midia.tipo_midia = getIntent().getStringExtra("fileType");
@@ -150,6 +144,7 @@ public class IdentificacaoActivity extends BaseActivity {
         denuncia.categoria_animal = getIntent().getStringExtra("categoria");
         denuncia.tipo_animal = getIntent().getStringExtra("animal");
         denuncia.descricao = getIntent().getStringExtra("descricao");
+        denuncia.situacao = "pendente";
         denuncia.hashtag = getHashtags(getIntent().getStringExtra("hashtags"));
         denuncia.endereco = getIntent().getStringExtra("endereco");
         denuncia.endereco_latitude = getIntent().getDoubleExtra("loc_latitude", 0);
@@ -160,8 +155,8 @@ public class IdentificacaoActivity extends BaseActivity {
         denuncia.id_dispositivo = tm.getDeviceId();
     }
 
-    private RealmList<Hashtag> getHashtags(String hashtags){
-        RealmList<Hashtag> lHashtags = new RealmList<Hashtag>();
+    private List<Hashtag> getHashtags(String hashtags){
+        List<Hashtag> lHashtags = new ArrayList<Hashtag>();
 
         String[] hashs = hashtags.split(" ");
         for (String h: hashs) {
@@ -212,7 +207,39 @@ public class IdentificacaoActivity extends BaseActivity {
                             // On complete call either onLoginSuccess or onLoginFailed
                             try {
 
-                                EnviaDenuncia(denuncia);
+
+                                db_denuncia = new dbDenuncia();
+                                db_denuncia.categoria_animal = denuncia.categoria_animal;
+                                db_denuncia.data = denuncia.data;
+                                db_denuncia.denunciante_email = denuncia.denunciante_email;
+                                db_denuncia.denunciante_telefone = denuncia.denunciante_telefone;
+                                db_denuncia.descricao = denuncia.descricao;
+                                db_denuncia.endereco = denuncia.endereco;
+                                db_denuncia.endereco_latitude = denuncia.endereco_latitude;
+                                db_denuncia.endereco_longitude = denuncia.endereco_longitude;
+                                db_denuncia.id_dispositivo = denuncia.id_dispositivo;
+                                db_denuncia.situacao = denuncia.situacao;
+                                db_denuncia.tipo_animal = denuncia.tipo_animal;
+                                db_denuncia.titulo = denuncia.titulo;
+                                //db_denuncia.id_server = response.body().iCodigo;
+
+                                ((CoreApplication)getApplication()).realm.executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm bgRealm) {
+                                        bgRealm.copyToRealmOrUpdate(db_denuncia);
+                                    }
+                                }, new Realm.Transaction.OnSuccess() {
+                                    public void onSuccess() {
+                                        finish();
+                                        NextActivity();
+                                    }
+                                }, new Realm.Transaction.OnError() {
+                                    public void onError(Throwable error) {
+                                        Log.e("SalvarDenunciaRealm", error.getMessage());
+                                    }
+                                });
+
+                                //EnviaDenuncia(denuncia);
 
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -229,35 +256,45 @@ public class IdentificacaoActivity extends BaseActivity {
 
     private void EnviaDenuncia(final Denuncia denuncia){
 
-        Gson gson = new GsonBuilder().create();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://webservice.mumbai.com.br/BichoDenuncia/BichoDenuncia.svc")
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
+        service = ServiceGenerator.createService(IRetrofit.class);
 
-        service = retrofit.create(IRetrofit.class);
         Call<ResultadoOperacao> call = service.enviaDenuncia(denuncia);
         call.enqueue(new Callback<ResultadoOperacao>() {
             @Override
             public void onResponse(Call<ResultadoOperacao> call, Response<ResultadoOperacao> response) {
                 if(response.body() != null) {
                     if(response.body().bSucesso) {
-                        denuncia.id_server = response.body().iCodigo;
-                        ((CoreApplication)getApplication()).realm.executeTransactionAsync(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm bgRealm) {
-                                bgRealm.copyToRealmOrUpdate(denuncia);
-                            }
-                        }, new Realm.Transaction.OnSuccess() {
-                            public void onSuccess() {
-                                finish();
-                                NextActivity();
-                            }
-                        }, new Realm.Transaction.OnError() {
-                            public void onError(Throwable error) {
-                                Log.e("SalvarDenunciaRealm", error.getMessage());
-                            }
-                        });
+
+//                        db_denuncia = new dbDenuncia();
+//                        db_denuncia.categoria_animal = denuncia.categoria_animal;
+//                        db_denuncia.data = denuncia.data;
+//                        db_denuncia.denunciante_email = denuncia.denunciante_email;
+//                        db_denuncia.denunciante_telefone = denuncia.denunciante_telefone;
+//                        db_denuncia.descricao = denuncia.descricao;
+//                        db_denuncia.endereco = denuncia.endereco;
+//                        db_denuncia.endereco_latitude = denuncia.endereco_latitude;
+//                        db_denuncia.endereco_longitude = denuncia.endereco_longitude;
+//                        db_denuncia.id_dispositivo = denuncia.id_dispositivo;
+//                        db_denuncia.situacao = denuncia.situacao;
+//                        db_denuncia.tipo_animal = denuncia.tipo_animal;
+//                        db_denuncia.titulo = denuncia.titulo;
+//                        db_denuncia.id_server = response.body().iCodigo;
+//
+//                        ((CoreApplication)getApplication()).realm.executeTransactionAsync(new Realm.Transaction() {
+//                            @Override
+//                            public void execute(Realm bgRealm) {
+//                                bgRealm.copyToRealmOrUpdate(db_denuncia);
+//                            }
+//                        }, new Realm.Transaction.OnSuccess() {
+//                            public void onSuccess() {
+//                                finish();
+//                                NextActivity();
+//                            }
+//                        }, new Realm.Transaction.OnError() {
+//                            public void onError(Throwable error) {
+//                                Log.e("SalvarDenunciaRealm", error.getMessage());
+//                            }
+//                        });
                     }
                 }
             }
@@ -316,11 +353,25 @@ public class IdentificacaoActivity extends BaseActivity {
             GoogleSignInAccount acct = result.getSignInAccount();
             text_nome_usuario.setText(acct.getDisplayName());
             edit_email.setText(acct.getEmail());
-            img_usuario_google.setVisibility(View.VISIBLE);
-            if(acct.getPhotoUrl() == null)
-                img_usuario_google.setImageResource(R.drawable.default_user);
+//            img_usuario_google.setVisibility(View.VISIBLE);
+//            if(acct.getPhotoUrl() == null)
+//                img_usuario_google.setImageResource(R.drawable.default_user);
+//            else
+//                img_usuario_google.setImageURI(acct.getPhotoUrl());
+
+            Bitmap bm;
+            if (acct.getPhotoUrl() == null)
+                bm = BitmapFactory.decodeResource(getResources(),R.drawable.default_user);
             else
-                img_usuario_google.setImageURI(acct.getPhotoUrl());
+                try {
+                    bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(),acct.getPhotoUrl());
+                } catch (IOException e) {
+                    bm = BitmapFactory.decodeResource(getResources(),R.drawable.default_user);
+                }
+
+            roundedImage = new RoundImage(bm);
+            img_usuario_google.setImageDrawable(roundedImage);
+            img_usuario_google.setVisibility(View.VISIBLE);
 
             Log.d("Google SignIn", "displayname: " + acct.getDisplayName());
             Log.d("Google SignIn", "displayemail: " + acct.getEmail());

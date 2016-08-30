@@ -20,9 +20,14 @@
 
 
         <LinearLayout
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/padding_horizontal"
+            android:paddingRight="@dimen/padding_horizontal"
             android:id="@+id/cam_botoes_acao"
             android:orientation="horizontal"
             android:weightSum="2"
+            android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
@@ -36,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="60dp"
                 android:scaleType="fitCenter"
-                    android:translationZ="100dp"/>
+                android:translationZ="100dp"/>
 
             <ImageButton
                 android:layout_weight="1"
@@ -55,18 +60,25 @@
                 android:layout_weight="2"
                 android:id="@+id/btn_stop_video"
                 android:src="@drawable/stop_video"
+                android:background="@android:color/transparent"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
+                android:scaleType="fitCenter"
                 android:translationZ="100dp" />
 
         </LinearLayout>
 
         <LinearLayout
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/padding_horizontal"
+            android:paddingRight="@dimen/padding_horizontal"
             android:id="@+id/cam_botoes_confirmacao"
             android:visibility="gone"
             android:orientation="horizontal"
             android:weightSum="3"
+            android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
@@ -77,17 +89,20 @@
                 android:src="@drawable/confirmar_captura"
                 android:id="@+id/btn_confirma_captura"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
+                android:background="@android:color/transparent"
                 android:layout_gravity="center"
+                android:scaleType="fitCenter"
                 android:translationZ="7dp" />
 
             <ImageButton
                 android:layout_weight="1"
                 android:src="@drawable/cancelar"
                 android:id="@+id/btn_cancela_captura"
-                android:text="X"
+                android:background="@android:color/transparent"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
+                android:scaleType="fitCenter"
                 android:layout_gravity="center"
                 android:translationZ="7dp" />
 

@@ -16,18 +16,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.natanaelribeiro.bichodenuncia.Custom.CircularImageView
-            android:layout_weight="1.85"
-            android:scaleType="fitXY"
-            android:layout_gravity="center"
-            android:src="@drawable/default_user"
+        <!--<com.natanaelribeiro.bichodenuncia.Custom.CircularImageView-->
+            <!--android:layout_weight="1.85"-->
+            <!--android:scaleType="fitCenter"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:src="@drawable/default_user"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
+
+        <ImageView
+            android:id="@+id/img_denuncia"
+            android:layout_weight="2.1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center"
+            android:src="@drawable/default_user" />
 
         <LinearLayout
-            android:layout_weight="1.15"
+            android:layout_weight="0.9"
             android:weightSum="2"
             android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

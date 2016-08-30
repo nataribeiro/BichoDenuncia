@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.natanaelribeiro.bichodenuncia">
 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -12,6 +13,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".AppCode.CoreApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -63,7 +65,9 @@
         <activity
             android:name=".PesquisarDenunciaActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ListaDenunciasActivity"></activity>
+        <activity
+            android:name=".ListaDenunciasActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

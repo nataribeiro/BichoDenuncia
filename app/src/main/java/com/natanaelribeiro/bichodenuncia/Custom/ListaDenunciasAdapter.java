@@ -9,34 +9,31 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Denuncia;
+import com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Realm.dbDenuncia;
 import com.natanaelribeiro.bichodenuncia.R;
 
-import java.util.List;
-
-import butterknife.ButterKnife;
 import io.realm.RealmResults;
 
 /**
  * Created by natanaelribeiro on 21/08/16.
  */
 public class ListaDenunciasAdapter extends BaseAdapter {
-    RealmResults<Denuncia> denuncias;
+    RealmResults<dbDenuncia> dbDenuncias;
     Context contexto;
 
-    public ListaDenunciasAdapter(Context contexto, RealmResults<Denuncia> denuncias){
+    public ListaDenunciasAdapter(Context contexto, RealmResults<dbDenuncia> dbDenuncias){
         this.contexto = contexto;
-        this.denuncias = denuncias;
+        this.dbDenuncias = dbDenuncias;
     }
 
     @Override
     public int getCount() {
-        return denuncias.size();
+        return dbDenuncias.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return denuncias.get(position);
+        return dbDenuncias.get(position);
     }
 
     @Override
@@ -53,15 +50,15 @@ public class ListaDenunciasAdapter extends BaseAdapter {
             ImageView img = (ImageView)convertView.findViewById(R.id.listDenuncia_imgStatus);
 
             TextView txtStatus = (TextView) convertView.findViewById(R.id.listDenuncia_txtStatus);
-            txtStatus.setText(denuncias.get(position).titulo);
+            txtStatus.setText(dbDenuncias.get(position).titulo);
 
-            if(denuncias.get(position).situacao.equals("pendente")) {
+            if(dbDenuncias.get(position).situacao.equals("pendente")) {
                 img.setImageResource(R.drawable.amarelo);
                 txtStatus.setTextColor(contexto.getResources().getColor(R.color.yellow));
-            } else if(denuncias.get(position).situacao.equals("resolvido")) {
+            } else if(dbDenuncias.get(position).situacao.equals("resolvido")) {
                 img.setImageResource(R.drawable.resolvido);
                 txtStatus.setTextColor(contexto.getResources().getColor(R.color.green));
-            } else if(denuncias.get(position).situacao.equals(("nao_resolvido"))) {
+            } else if(dbDenuncias.get(position).situacao.equals(("nao_resolvido"))) {
                 img.setImageResource(R.drawable.nao_resolvido);
                 txtStatus.setTextColor(contexto.getResources().getColor(R.color.red));
             }
