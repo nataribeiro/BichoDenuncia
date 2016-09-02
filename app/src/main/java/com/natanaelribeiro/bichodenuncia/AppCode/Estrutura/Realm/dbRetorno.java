@@ -14,5 +14,5 @@ public class dbRetorno extends RealmObject {
     public int id_denuncia;
     public String entidade;
     public String descricao;
-    public String data;
+    public Date data;
 }

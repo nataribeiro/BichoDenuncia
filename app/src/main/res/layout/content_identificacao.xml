@@ -142,14 +142,6 @@
             android:inputType="phone"
             android:phoneNumber="true" />
 
-        <CheckBox
-            android:id="@+id/checkbox_lembrarDeMim"
-            android:buttonTint="@android:color/white"
-            android:textColor="@android:color/white"
-            android:text="Lembrar de mim"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
     </LinearLayout>
 
     <LinearLayout

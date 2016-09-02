@@ -7,8 +7,7 @@ import java.util.List;
  * Created by natanaelribeiro on 29/08/16.
  */
 public class Denuncia {
-    public int id;
-    public int id_server;
+    public Integer id;
     public String titulo;
     public String descricao;
     public String situacao;

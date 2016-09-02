@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "89921736205",
-    "firebase_url": "https://bicho-denuncia.firebaseio.com",
-    "project_id": "bicho-denuncia",
-    "storage_bucket": "bicho-denuncia.appspot.com"
+    "project_number": "1051531867896",
+    "firebase_url": "https://bicho-denuncia-3c1a2.firebaseio.com",
+    "project_id": "bicho-denuncia-3c1a2",
+    "storage_bucket": "bicho-denuncia-3c1a2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:89921736205:android:14b4976e042f7985",
+        "mobilesdk_app_id": "1:1051531867896:android:14b4976e042f7985",
         "android_client_info": {
           "package_name": "com.natanaelribeiro.bichodenuncia"
         }
       },
       "oauth_client": [
         {
-          "client_id": "89921736205-5089ro7k69u1l4jpbhvg25hsh3dh3kac.apps.googleusercontent.com",
+          "client_id": "1051531867896-1cdbd8ou9dn8c14off1q6sar8smf05ij.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.natanaelribeiro.bichodenuncia",
@@ -23,17 +23,13 @@
           }
         },
         {
-          "client_id": "89921736205-etjh8b3bs4ho85ddjg4dak15lav1m11a.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "89921736205-ku0kq3aq0mnsa6uj9l9d1bkhtqkemeof.apps.googleusercontent.com",
+          "client_id": "1051531867896-n4tef4lthhqtk6n2t9mau5i36540nrv1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBNhtNe9MFBss-O2WcC5VG4tK8RTc4YAyY"
+          "current_key": "AIzaSyBpUtZA-meiRQ9GjcUG6ktNsrey5c2UveY"
         }
       ],
       "services": {
@@ -44,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "89921736205-etjh8b3bs4ho85ddjg4dak15lav1m11a.apps.googleusercontent.com",
+              "client_id": "1051531867896-n4tef4lthhqtk6n2t9mau5i36540nrv1.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

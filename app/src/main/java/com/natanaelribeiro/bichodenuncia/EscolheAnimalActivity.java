@@ -1,12 +1,14 @@
 package com.natanaelribeiro.bichodenuncia;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import com.natanaelribeiro.bichodenuncia.AppCode.Constantes;
 
@@ -19,7 +21,7 @@ public class EscolheAnimalActivity extends BaseActivity {
     private String filePath;
     private String fileType;
     private String categoria;
-    private Constantes.eAnimal animal;
+    private String animal;
 
     @BindView(R.id.imagebutton1) public ImageButton imagebutton1;
     @BindView(R.id.imagebutton2) public ImageButton imagebutton2;
@@ -71,45 +73,82 @@ public class EscolheAnimalActivity extends BaseActivity {
     @OnClick(R.id.imagebutton1)
     public void onClickImagem1() {
         if(categoria.equals(Constantes.ANIMAIS_DOMESTICOS))
-            animal = Constantes.eAnimal.gato;
+            animal = Constantes.eAnimal.gato.toString();
         else
-            animal = Constantes.eAnimal.primata;
+            animal = Constantes.eAnimal.primata.toString();
         NextActivity(animal);
     }
 
     @OnClick(R.id.imagebutton2)
     public void onClickImagem2() {
         if(categoria.equals(Constantes.ANIMAIS_DOMESTICOS))
-            animal = Constantes.eAnimal.cachorro;
+            animal = Constantes.eAnimal.cachorro.toString();
         else
-            animal = Constantes.eAnimal.ave;
+            animal = Constantes.eAnimal.ave.toString();
         NextActivity(animal);
     }
 
     @OnClick(R.id.imagebutton3)
     public void onClickImagem3() {
         if(categoria.equals(Constantes.ANIMAIS_DOMESTICOS))
-            animal = Constantes.eAnimal.cavalo;
+            animal = Constantes.eAnimal.cavalo.toString();
         else
-            animal = Constantes.eAnimal.rodedor_selvagem;
+            animal = Constantes.eAnimal.rodedor_selvagem.toString();
         NextActivity(animal);
     }
 
     @OnClick(R.id.imagebutton4)
     public void onClickImagem4() {
         if(categoria.equals(Constantes.ANIMAIS_DOMESTICOS))
-            animal = Constantes.eAnimal.roedor_domestico;
+            animal = Constantes.eAnimal.roedor_domestico.toString();
         else
-            animal = Constantes.eAnimal.marinho;
+            animal = Constantes.eAnimal.marinho.toString();
         NextActivity(animal);
     }
 
-    private void NextActivity(Constantes.eAnimal animal) {
+    @OnClick(R.id.btn_outro_animal)
+    public void onClickOutroAnimal(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.ic_logo);
+        builder.setTitle("Outro Animal");
+        builder.setMessage("Informe o tipo de animal que está sendo maltratado");
+
+        final EditText input = new EditText(this);
+        input.setHighlightColor(getResources().getColor(R.color.colorPrimary));
+        input.setBackgroundColor(getResources().getColor(R.color.gray));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            input.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        }
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        builder.setView(input);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                animal = input.getText().toString();
+                NextActivity(animal);
+                return;
+            }
+        });
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                return;
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void NextActivity(String animal) {
         Intent intent = new Intent(this, DetalhamentoDenunciaActivity.class);
         intent.putExtra("filePath", filePath);
         intent.putExtra("fileType", fileType);
         intent.putExtra("categoria", categoria);
-        intent.putExtra("animal", animal.toString());
+        intent.putExtra("animal", animal);
         startActivity(intent);
     }
 

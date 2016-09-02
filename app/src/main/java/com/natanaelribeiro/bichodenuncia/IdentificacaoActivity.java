@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.natanaelribeiro.bichodenuncia.AppCode.Constantes;
 import com.natanaelribeiro.bichodenuncia.AppCode.CoreApplication;
 import com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Realm.dbDenuncia;
 import com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Service.Denuncia;
@@ -44,7 +46,11 @@ import com.natanaelribeiro.bichodenuncia.Custom.RoundImage;
 
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,7 +60,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
-import io.realm.RealmList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -73,6 +78,7 @@ public class IdentificacaoActivity extends BaseActivity {
 
     private Denuncia denuncia;
     private dbDenuncia db_denuncia;
+    private List<String> listHashtags;
 
     public IRetrofit service;
     public static CallbackManager mCallbackManager;
@@ -120,48 +126,94 @@ public class IdentificacaoActivity extends BaseActivity {
 
         checkUserLoggedIn();
         carregaExtras();
+
     }
 
     private void carregaExtras(){
+        String sFileType = getIntent().getStringExtra("fileType");
         String sFilePath = getIntent().getStringExtra("filePath");
+        String sFileArray;
 
-        Bitmap imagem = BitmapFactory.decodeFile(sFilePath);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        imagem.compress(Bitmap.CompressFormat.JPEG, 50, stream);
-        byte[] imgByteArray = stream.toByteArray();
-        String sImagemArray = Base64.encodeToString(imgByteArray, Base64.DEFAULT);
+        if(sFileType.equals("I")) {
+            Bitmap imagem = BitmapFactory.decodeFile(sFilePath);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            imagem.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+            byte[] imgByteArray = stream.toByteArray();
+            sFileArray = Base64.encodeToString(imgByteArray, Base64.DEFAULT);
+        }else{
+            File tempFile = new File(sFilePath);
+
+            InputStream inputStream = null;
+            try {
+                inputStream = new FileInputStream(tempFile);
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+            byte[] bytes;
+            byte[] buffer = new byte[8192];
+            int bytesRead;
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            try {
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    output.write(buffer, 0, bytesRead);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            bytes = output.toByteArray();
+            sFileArray = Base64.encodeToString(bytes, Base64.DEFAULT);
+        }
 
         denuncia = new Denuncia();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strDate = sdf.format(new Date());
 
         denuncia.data = strDate;
         Midia midia = new Midia();
-        midia.arquivo = sImagemArray;
-        midia.tipo_midia = getIntent().getStringExtra("fileType");
+        midia.arquivo = sFileArray;
+        midia.tipo_midia = sFileType;
         midia.sequencia = 1;
         denuncia.categoria_animal = getIntent().getStringExtra("categoria");
         denuncia.tipo_animal = getIntent().getStringExtra("animal");
         denuncia.descricao = getIntent().getStringExtra("descricao");
-        denuncia.situacao = "pendente";
+        denuncia.situacao = "P";
         denuncia.hashtag = getHashtags(getIntent().getStringExtra("hashtags"));
         denuncia.endereco = getIntent().getStringExtra("endereco");
         denuncia.endereco_latitude = getIntent().getDoubleExtra("loc_latitude", 0);
         denuncia.endereco_longitude = getIntent().getDoubleExtra("loc_longitude", 0);
         denuncia.midia.add(midia);
 
-        final TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
-        denuncia.id_dispositivo = tm.getDeviceId();
+//        final TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+//        denuncia.id_dispositivo = tm.getDeviceId();
+        denuncia.id_dispositivo = FirebaseInstanceId.getInstance().getToken();
+
+        //Monta titulo
+        denuncia.titulo = montaTituloDenuncia();
+
+    }
+
+    private String montaTituloDenuncia(){
+        if(listHashtags.contains("#violencia"))
+            return "Violência com " + denuncia.tipo_animal;
+        if(listHashtags.contains("#maustratos") || listHashtags.contains("#maus-tratos"))
+            return "Maus tratos com " + denuncia.tipo_animal;
+        if(listHashtags.contains("#abuso"))
+            return "Abuso com " + denuncia.tipo_animal;
+        if(listHashtags.contains("#abandono"))
+            return "Abandono de " + denuncia.tipo_animal;
+        return "Denúncia - " + denuncia.tipo_animal;
     }
 
     private List<Hashtag> getHashtags(String hashtags){
         List<Hashtag> lHashtags = new ArrayList<Hashtag>();
+        listHashtags = new ArrayList<>();
 
         String[] hashs = hashtags.split(" ");
         for (String h: hashs) {
             Hashtag hash = new Hashtag();
             hash.hashtag = "#" + h.replace("#", "");
+            listHashtags.add(hash.hashtag.toLowerCase());
             lHashtags.add(hash);
         }
 
@@ -204,42 +256,11 @@ public class IdentificacaoActivity extends BaseActivity {
             new android.os.Handler().postDelayed(
                     new Runnable() {
                         public void run() {
-                            // On complete call either onLoginSuccess or onLoginFailed
                             try {
 
+                                EnviaDenuncia(denuncia);
 
-                                db_denuncia = new dbDenuncia();
-                                db_denuncia.categoria_animal = denuncia.categoria_animal;
-                                db_denuncia.data = denuncia.data;
-                                db_denuncia.denunciante_email = denuncia.denunciante_email;
-                                db_denuncia.denunciante_telefone = denuncia.denunciante_telefone;
-                                db_denuncia.descricao = denuncia.descricao;
-                                db_denuncia.endereco = denuncia.endereco;
-                                db_denuncia.endereco_latitude = denuncia.endereco_latitude;
-                                db_denuncia.endereco_longitude = denuncia.endereco_longitude;
-                                db_denuncia.id_dispositivo = denuncia.id_dispositivo;
-                                db_denuncia.situacao = denuncia.situacao;
-                                db_denuncia.tipo_animal = denuncia.tipo_animal;
-                                db_denuncia.titulo = denuncia.titulo;
-                                //db_denuncia.id_server = response.body().iCodigo;
-
-                                ((CoreApplication)getApplication()).realm.executeTransactionAsync(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm bgRealm) {
-                                        bgRealm.copyToRealmOrUpdate(db_denuncia);
-                                    }
-                                }, new Realm.Transaction.OnSuccess() {
-                                    public void onSuccess() {
-                                        finish();
-                                        NextActivity();
-                                    }
-                                }, new Realm.Transaction.OnError() {
-                                    public void onError(Throwable error) {
-                                        Log.e("SalvarDenunciaRealm", error.getMessage());
-                                    }
-                                });
-
-                                //EnviaDenuncia(denuncia);
+                                Thread.sleep(3000);
 
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -254,6 +275,16 @@ public class IdentificacaoActivity extends BaseActivity {
 
     }
 
+    private int getNextKey()
+    {
+        try {
+            return ((CoreApplication) getApplication()).realm.where(dbDenuncia.class).max("id").intValue() + 1;
+        }
+        catch (Exception e) {
+            return 1;
+        }
+    }
+
     private void EnviaDenuncia(final Denuncia denuncia){
 
         service = ServiceGenerator.createService(IRetrofit.class);
@@ -265,49 +296,66 @@ public class IdentificacaoActivity extends BaseActivity {
                 if(response.body() != null) {
                     if(response.body().bSucesso) {
 
-//                        db_denuncia = new dbDenuncia();
-//                        db_denuncia.categoria_animal = denuncia.categoria_animal;
-//                        db_denuncia.data = denuncia.data;
-//                        db_denuncia.denunciante_email = denuncia.denunciante_email;
-//                        db_denuncia.denunciante_telefone = denuncia.denunciante_telefone;
-//                        db_denuncia.descricao = denuncia.descricao;
-//                        db_denuncia.endereco = denuncia.endereco;
-//                        db_denuncia.endereco_latitude = denuncia.endereco_latitude;
-//                        db_denuncia.endereco_longitude = denuncia.endereco_longitude;
-//                        db_denuncia.id_dispositivo = denuncia.id_dispositivo;
-//                        db_denuncia.situacao = denuncia.situacao;
-//                        db_denuncia.tipo_animal = denuncia.tipo_animal;
-//                        db_denuncia.titulo = denuncia.titulo;
-//                        db_denuncia.id_server = response.body().iCodigo;
-//
-//                        ((CoreApplication)getApplication()).realm.executeTransactionAsync(new Realm.Transaction() {
-//                            @Override
-//                            public void execute(Realm bgRealm) {
-//                                bgRealm.copyToRealmOrUpdate(db_denuncia);
-//                            }
-//                        }, new Realm.Transaction.OnSuccess() {
-//                            public void onSuccess() {
-//                                finish();
-//                                NextActivity();
-//                            }
-//                        }, new Realm.Transaction.OnError() {
-//                            public void onError(Throwable error) {
-//                                Log.e("SalvarDenunciaRealm", error.getMessage());
-//                            }
-//                        });
+                        salvaDenunciaRealm(denuncia, response.body().iCodigo);
+
+                    } else{
+                        Log.e("ResponsePOST", "Retorno false da api");
                     }
+                } else{
+                    Log.e("ResponsePOST", "Sem retorno");
                 }
             }
 
             @Override
             public void onFailure(Call<ResultadoOperacao> call, Throwable t) {
                 Log.e("EnviarDenuncia", t.getMessage());
+                //TODO Fazer tentativa de reenvio quando houver internet
+
+                salvaDenunciaRealm(denuncia, null);
+            }
+        });
+    }
+
+    private void salvaDenunciaRealm(Denuncia denuncia, Integer iCodigoServer) {
+        db_denuncia = new dbDenuncia();
+        db_denuncia.id = getNextKey();
+        db_denuncia.categoria_animal = denuncia.categoria_animal;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {db_denuncia.data = sdf.parse(denuncia.data);}
+        catch(ParseException e) { }
+        db_denuncia.denunciante_email = denuncia.denunciante_email;
+        db_denuncia.denunciante_telefone = denuncia.denunciante_telefone;
+        db_denuncia.descricao = denuncia.descricao;
+        db_denuncia.endereco = denuncia.endereco;
+        db_denuncia.endereco_latitude = denuncia.endereco_latitude;
+        db_denuncia.endereco_longitude = denuncia.endereco_longitude;
+        db_denuncia.id_dispositivo = denuncia.id_dispositivo;
+        db_denuncia.situacao = denuncia.situacao;
+        db_denuncia.tipo_animal = denuncia.tipo_animal;
+        db_denuncia.titulo = denuncia.titulo;
+        if(iCodigoServer != null)
+            db_denuncia.id_server = iCodigoServer;
+
+        ((CoreApplication)getApplication()).realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm bgRealm) {
+                bgRealm.copyToRealmOrUpdate(db_denuncia);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            public void onSuccess() {
+                finish();
+                NextActivity();
+            }
+        }, new Realm.Transaction.OnError() {
+            public void onError(Throwable error) {
+                Log.e("SalvarDenunciaRealm", error.getMessage());
             }
         });
     }
 
     private void NextActivity(){
         Intent intent = new Intent(IdentificacaoActivity.this, DenunciaEnviadaActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
@@ -353,11 +401,6 @@ public class IdentificacaoActivity extends BaseActivity {
             GoogleSignInAccount acct = result.getSignInAccount();
             text_nome_usuario.setText(acct.getDisplayName());
             edit_email.setText(acct.getEmail());
-//            img_usuario_google.setVisibility(View.VISIBLE);
-//            if(acct.getPhotoUrl() == null)
-//                img_usuario_google.setImageResource(R.drawable.default_user);
-//            else
-//                img_usuario_google.setImageURI(acct.getPhotoUrl());
 
             Bitmap bm;
             if (acct.getPhotoUrl() == null)
@@ -373,9 +416,6 @@ public class IdentificacaoActivity extends BaseActivity {
             img_usuario_google.setImageDrawable(roundedImage);
             img_usuario_google.setVisibility(View.VISIBLE);
 
-            Log.d("Google SignIn", "displayname: " + acct.getDisplayName());
-            Log.d("Google SignIn", "displayemail: " + acct.getEmail());
-            Log.d("Google SignIn", "displayimage: " + acct.getPhotoUrl());
         } else {
             Log.d("Google SignIn", "sign out");
         }

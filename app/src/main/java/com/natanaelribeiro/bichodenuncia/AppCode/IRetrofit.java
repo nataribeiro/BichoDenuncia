@@ -18,9 +18,9 @@ public interface IRetrofit {
     @GET("Denuncias/Usuario/id")
     Call<List<Denuncia>> getDenuncias(@Path("id") String id);
 
-    @GET("dbDenuncia/id")
+    @GET("Denuncia/id")
     Call<Denuncia> getDenuncia(@Path("id") String id);
 
-    @POST("dbDenuncia")
-    Call<ResultadoOperacao> enviaDenuncia(@Body Denuncia dbDenuncia);
+    @POST("Denuncia")
+    Call<ResultadoOperacao> enviaDenuncia(@Body Denuncia denuncia);
 }

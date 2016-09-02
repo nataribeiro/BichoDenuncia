@@ -36,6 +36,7 @@ public class CameraActivity extends BaseActivity {
 
     private int fileType;
     private File pictureFile;
+    private String sOutuputVideo;
     private byte[] dataFile;
 
     @BindView(R.id.btn_capture_image) public ImageButton btn_capture_image;
@@ -156,7 +157,8 @@ public class CameraActivity extends BaseActivity {
 
         mRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
 
-        mRecorder.setOutputFile(getOutputMediaFile(Constantes.MEDIA_TYPE_VIDEO).toString());
+        sOutuputVideo = getOutputMediaFile(Constantes.MEDIA_TYPE_VIDEO).toString();
+        mRecorder.setOutputFile(sOutuputVideo);
 
         mRecorder.setPreviewDisplay(mPreview.getHolder().getSurface());
 
@@ -201,19 +203,25 @@ public class CameraActivity extends BaseActivity {
 
     @OnClick(R.id.btn_confirma_captura)
     public void onClickConfirmaCaptura(){
-        try {
-            FileOutputStream fos = new FileOutputStream(pictureFile);
-            fos.write(dataFile);
-            fos.close();
-        } catch (FileNotFoundException e) {
-            Log.d("SaveFile", "File not found: " + e.getMessage());
-        } catch (IOException e) {
-            Log.d("SaveFile", "Error accessing file: " + e.getMessage());
-        }
 
+        String filePath;
+        if(fileType == Constantes.MEDIA_TYPE_IMAGE) {
+            try {
+                FileOutputStream fos = new FileOutputStream(pictureFile);
+                fos.write(dataFile);
+                fos.close();
+            } catch (FileNotFoundException e) {
+                Log.d("SaveFile", "File not found: " + e.getMessage());
+            } catch (IOException e) {
+                Log.d("SaveFile", "Error accessing file: " + e.getMessage());
+            }
+            filePath = pictureFile.getPath();
+        } else {
+            filePath = sOutuputVideo;
+        }
         Intent resultIntent = new Intent();
         resultIntent.putExtra("fileType", fileType);
-        resultIntent.putExtra("filePath", pictureFile.getPath());
+        resultIntent.putExtra("filePath", filePath);
         this.setResult(RESULT_OK, resultIntent);
 
         finish();

@@ -1,9 +1,15 @@
 package com.natanaelribeiro.bichodenuncia;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.natanaelribeiro.bichodenuncia.AppCode.Constantes;
 import com.natanaelribeiro.bichodenuncia.AppCode.CoreApplication;
 import com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Realm.dbDenuncia;
 import com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Realm.dbHashtag;
@@ -16,6 +22,8 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import io.realm.Case;
 import io.realm.RealmChangeListener;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
@@ -23,6 +31,8 @@ import io.realm.Sort;
 
 public class ListaDenunciasActivity extends BaseActivity {
 
+    @BindView(R.id.txt_tipo_busca) public TextView txt_tipo_busca;
+    @BindView(R.id.txt_conteudo_busca) public TextView txt_conteudo_busca;
     @BindView(R.id.list_denuncias_busca) public ListView listTasks;
     public static RealmResults<dbDenuncia> results;
     public static RealmResults<dbHashtag> hashtagsResult;
@@ -44,17 +54,23 @@ public class ListaDenunciasActivity extends BaseActivity {
     private void carregaInfoBusca(String tipo_busca){
         switch (tipo_busca){
             case "ultimas": {
+                txt_tipo_busca.setText("ULTIMAS DENÚNCIAS");
+                txt_conteudo_busca.setText("Lista das últimas denúncias realizadas");
                 carregaUltimasDenuncias();
                 break;
             }
             case "data":{
                 String data_inicio = getIntent().getStringExtra("data_inicio");
                 String data_fim = getIntent().getStringExtra("data_fim");
+                txt_tipo_busca.setText("POR DATA");
+                txt_conteudo_busca.setText("de " + data_inicio + " à " + data_fim);
                 carregaDenunciasPorData(data_inicio, data_fim);
                 break;
             }
-            case "dbHashtag":{
+            case "hashtag":{
                 String filtro = getIntent().getStringExtra("filtro");
+                txt_tipo_busca.setText("POR HASHTAG");
+                txt_conteudo_busca.setText(filtro);
                 carregaDenunciasPorHashtag(filtro);
                 break;
             }
@@ -65,15 +81,27 @@ public class ListaDenunciasActivity extends BaseActivity {
         public void onChange(Object element) {
             results = (RealmResults<dbDenuncia>) element;
 
-            listTasks.setAdapter(new ListaDenunciasAdapter(ListaDenunciasActivity.this, results));
+            populaListView();
         }
     };
+
+    private void populaListView(){
+        listTasks.setAdapter(new ListaDenunciasAdapter(ListaDenunciasActivity.this, results));
+        listTasks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getBaseContext(), DetalhesDenunciaActivity.class);
+                intent.putExtra("id_denuncia", results.get(i).id);
+                startActivity(intent);
+            }
+        });
+    }
 
     private void carregaUltimasDenuncias() {
         results = ((CoreApplication)getApplication()).
                 realm.where(dbDenuncia.class)
-                .findAllSortedAsync("id", Sort.DESCENDING);
-        results.addChangeListener(callback);
+                .findAllSorted("id", Sort.DESCENDING);
+        //results.addChangeListener(callback);
 
         int iUltimos = 5;
         if(results.size() < iUltimos)
@@ -84,7 +112,11 @@ public class ListaDenunciasActivity extends BaseActivity {
             lDbDenuncias.add(results.get(i));
         }
 
-        listTasks.setAdapter(new ListaDenunciasAdapter(ListaDenunciasActivity.this, results));
+        if(results.size() > 0) {
+            populaListView();
+        } else {
+            showMensagemDenunciasNaoEncontradas();
+        }
     }
 
     private void carregaDenunciasPorData(String data_inicio, String data_fim){
@@ -94,7 +126,7 @@ public class ListaDenunciasActivity extends BaseActivity {
         Date dateFim = new Date();
         try {
             dateInicio = dateFormat.parse(data_inicio);
-            dateInicio = dateFormat.parse(data_fim);
+            dateFim = dateFormat.parse(data_fim);
         } catch (ParseException e) {
             Log.e("DateParse", e.getMessage());
         }
@@ -102,81 +134,67 @@ public class ListaDenunciasActivity extends BaseActivity {
         results = ((CoreApplication)getApplication()).
                 realm.where(dbDenuncia.class)
                 .between("data", dateInicio, dateFim)
-                .findAllSortedAsync("id", Sort.DESCENDING);
-        results.addChangeListener(callback);
+                .findAllSorted("id", Sort.DESCENDING);
 
-        listTasks.setAdapter(new ListaDenunciasAdapter(ListaDenunciasActivity.this, results));
+        if(results.size() > 0) {
+            populaListView();
+        } else {
+            showMensagemDenunciasNaoEncontradas();
+        }
     }
 
     private  void carregaDenunciasPorHashtag(String filtro){
         hashtagsResult = ((CoreApplication)getApplication()).
                 realm.where(dbHashtag.class)
-                .contains("dbHashtag", filtro)
-                .findAllSortedAsync("id", Sort.DESCENDING)
-                .distinct("id");
+                .contains("hashtag", filtro, Case.INSENSITIVE)
+                .findAll();
 
-
-        RealmQuery<dbDenuncia> query = ((CoreApplication)getApplication()).
-                realm.where(dbDenuncia.class)
-                .beginGroup();
-
-        int i = 0;
-        for (dbHashtag h:hashtagsResult) {
-            if(i != 0)
-                query = query.or();
-            query = query.equalTo("id", h.id_denuncia);
+        Integer[] ids = new Integer[hashtagsResult.size()];
+        for (int i = 0; i < hashtagsResult.size(); i++) {
+            ids[i] = hashtagsResult.get(i).id;
         }
-        query = query.endGroup();
 
-        results = query.findAllSortedAsync("id", Sort.DESCENDING);
+        if(ids.length > 0) {
+            results = ((CoreApplication) getApplication()).
+                    realm.where(dbDenuncia.class)
+                    .in("id", ids)
+                    .findAllSorted("id", Sort.DESCENDING);
+
+            populaListView();
+        } else {
+            showMensagemDenunciasNaoEncontradas();
+        }
     }
 
-//    private void GetContatoFromService(String id){
-//        //Utiliza retrofit para buscar as informações
-//        Gson gson = new GsonBuilder().create();
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("http://dev.4all.com:3003")
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-//                .build();
-//
-//        service = retrofit.create(IRetrofit.class);
-//        Call<Contato> call = service.getContato(id);
-//        call.enqueue(new Callback<Contato>() {
-//            @Override
-//            public void onResponse(Call<Contato> call, Response<Contato> response) {
-//                if(response.body() != null) {
-//                    //No dbRetorno popula os componentes e seta a variavel user para uso futuro
-//                    user = response.body();
-//
-//                    getSupportActionBar().setIcon(R.drawable.ic_location_on_white_24dp);
-//                    getSupportActionBar().setTitle(user.cidade + " - " + user.bairro);
-//                    ImageView imgFoto = (ImageView)findViewById(R.id.imgFoto);
-//                    new DownloadImageTask(imgFoto).execute(user.urlFoto);
-//                    TextView txt_texto = (TextView)findViewById(R.id.txt_texto);
-//                    txt_texto.setText(user.texto);
-//                    TextView txt_titulo = (TextView)findViewById(R.id.txt_titulo);
-//                    txt_titulo.setText(user.titulo);
-//                    TextView txt_endereco = (TextView)findViewById(R.id.txt_endereco);
-//                    txt_endereco.setText(user.endereco);
-//                    FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
-//                    new DownloadImageTask(fab).execute(user.urlLogo);
-//
-//                    //Centraliza o mapa utilizando a latitude e longitude
-//                    LatLng location = new LatLng(user.latitude, user.longitude);
-//                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
-//                    //Desabilita a navegação no mapa
-//                    mMap.getUiSettings().setAllGesturesEnabled(false);
-//
-//                    ListView listView_comentarios = (ListView)findViewById(R.id.listView_comentarios);
-//                    ListaComentariosAdapter adapter = new ListaComentariosAdapter(getBaseContext(), user.comentarios);
-//                    listView_comentarios.setAdapter(adapter);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Contato> call, Throwable t) {
-//
-//            }
-//        });
-//    }
+    private void showMensagemDenunciasNaoEncontradas(){
+        Toast.makeText(this, "Nenhuma denúncia encontrada.", Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.btn_ir_nova_denuncia)
+    public void onClickNovaDenuncia() {
+        Intent intent = new Intent(this, CameraActivity.class);
+        startActivityForResult(intent, Constantes.REQUEST_CAMERA);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == Constantes.REQUEST_CAMERA){
+            if(resultCode == RESULT_OK){
+                String fileType;
+                String filePath;
+
+                int type = data.getIntExtra("fileType", 0);
+                if(type == Constantes.MEDIA_TYPE_IMAGE)
+                    fileType = "I";
+                else
+                    fileType = "V";
+                filePath = data.getStringExtra("filePath");
+                Intent intent = new Intent(this, EscolheCategoriaActivity.class);
+                intent.putExtra("filePath", filePath);
+                intent.putExtra("fileType", fileType);
+                startActivity(intent);
+            }
+        }
+    }
+
 }

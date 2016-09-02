@@ -42,7 +42,7 @@
         <ImageButton
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/nova_denuncia2"
+            android:src="@drawable/nova_denuncia"
             android:background="@android:color/transparent"
             android:id="@+id/imageButton"
             android:layout_gravity="center"

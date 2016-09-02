@@ -52,13 +52,13 @@ public class ListaDenunciasAdapter extends BaseAdapter {
             TextView txtStatus = (TextView) convertView.findViewById(R.id.listDenuncia_txtStatus);
             txtStatus.setText(dbDenuncias.get(position).titulo);
 
-            if(dbDenuncias.get(position).situacao.equals("pendente")) {
+            if(dbDenuncias.get(position).situacao.equals("P")) {
                 img.setImageResource(R.drawable.amarelo);
                 txtStatus.setTextColor(contexto.getResources().getColor(R.color.yellow));
-            } else if(dbDenuncias.get(position).situacao.equals("resolvido")) {
+            } else if(dbDenuncias.get(position).situacao.equals("R")) {
                 img.setImageResource(R.drawable.resolvido);
                 txtStatus.setTextColor(contexto.getResources().getColor(R.color.green));
-            } else if(dbDenuncias.get(position).situacao.equals(("nao_resolvido"))) {
+            } else if(dbDenuncias.get(position).situacao.equals(("N"))) {
                 img.setImageResource(R.drawable.nao_resolvido);
                 txtStatus.setTextColor(contexto.getResources().getColor(R.color.red));
             }

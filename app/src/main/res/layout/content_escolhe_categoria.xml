@@ -17,30 +17,48 @@
         android:gravity="center"
         android:id="@+id/txtCategoria" />
 
-    <ImageButton
-        android:layout_weight="1.5"
-        android:background="@android:color/transparent"
-        android:src="@drawable/animais_domesticos"
-        android:id="@+id/btn_cat_animais_domesticos"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:scaleType="fitCenter"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:onClick="onClickAnimaisDomesticos"
-        android:contentDescription="@string/texto_animais_domesticos" />
+        android:layout_weight="1.5"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
 
-    <ImageButton
-        android:layout_weight="1.5"
-        android:background="@android:color/transparent"
-        android:src="@drawable/animais_selvagens"
-        android:id="@+id/btn_cat_animais_selvagens"
-        android:layout_width="wrap_content"
+        <ImageButton
+            android:background="@android:color/transparent"
+            android:src="@drawable/animais_domesticos"
+            android:id="@+id/btn_cat_animais_domesticos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:onClick="onClickAnimaisDomesticos"
+            android:contentDescription="@string/texto_animais_domesticos" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:scaleType="fitCenter"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:onClick="onClickAnimaisSelvagens"
-        android:contentDescription="@string/texto_animais_selvagens" />
+        android:layout_weight="1.5"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+        <ImageButton
+            android:background="@android:color/transparent"
+            android:src="@drawable/animais_selvagens"
+            android:id="@+id/btn_cat_animais_selvagens"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:onClick="onClickAnimaisSelvagens"
+            android:contentDescription="@string/texto_animais_selvagens" />
+
+    </LinearLayout>
+
+
+
+
 
 </LinearLayout>

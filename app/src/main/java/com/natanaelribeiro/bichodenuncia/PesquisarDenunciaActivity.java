@@ -90,13 +90,13 @@ public class PesquisarDenunciaActivity extends BaseActivity implements View.OnCl
     @OnClick(R.id.btn_pesquisar_denuncias)
     public void onClickPesquisar() {
         Intent intent = new Intent(this, ListaDenunciasActivity.class);
-        if(!date_from.equals("") && !date_to.equals("")) {
+        if(!date_from.getText().toString().equals("") && !date_to.getText().toString().equals("")) {
             intent.putExtra("tipo_busca", "data");
             intent.putExtra("data_inicio", date_from.getText().toString());
             intent.putExtra("data_fim", date_to.getText().toString());
             startActivity(intent);
         } else if(!edit_search_hashtags.equals((""))){
-            intent.putExtra("tipo_busca", "dbHashtag");
+            intent.putExtra("tipo_busca", "hashtag");
             intent.putExtra("filtro", edit_search_hashtags.getText().toString());
             startActivity(intent);
         } else {

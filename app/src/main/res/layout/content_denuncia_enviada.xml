@@ -3,21 +3,25 @@
     android:weightSum="6"
     android:background="@drawable/fundo"
     android:orientation="vertical"
+    android:paddingTop="@dimen/activity_vertical_margin"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_weight="2"
+        android:layout_weight="1.7"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/padding_horizontal"
         android:paddingRight="@dimen/padding_horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center">
 
         <ImageView
             android:src="@drawable/logo"
             android:layout_gravity="center"
             android:foregroundGravity="center"
+            android:scaleType="fitCenter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -25,12 +29,12 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_weight="3"
+        android:layout_weight="2.1"
         android:weightSum="2"
         android:paddingLeft="@dimen/padding_horizontal"
         android:paddingRight="@dimen/padding_horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <TextView
             android:layout_weight="1"
@@ -57,25 +61,34 @@
     <LinearLayout
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_weight="1"
+        android:layout_weight="2.2"
+        android:weightSum="2"
         android:paddingLeft="@dimen/padding_horizontal"
         android:paddingRight="@dimen/padding_horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageButton
+            android:layout_weight="1"
             android:id="@+id/btn_ir_pesquisa"
-            android:src="@drawable/pesquisar_denuncia"
+            android:src="@drawable/pesquisar_alto"
             android:background="@android:color/transparent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:scaleType="fitCenter"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <ImageButton
+            android:layout_weight="1"
             android:id="@+id/btn_ir_nova_denuncia"
-            android:src="@drawable/nova_denuncia2"
+            android:src="@drawable/nova_denuncia"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:background="@android:color/transparent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:scaleType="fitCenter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

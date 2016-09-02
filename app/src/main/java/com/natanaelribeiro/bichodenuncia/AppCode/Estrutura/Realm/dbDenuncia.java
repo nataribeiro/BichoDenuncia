@@ -1,5 +1,7 @@
 package com.natanaelribeiro.bichodenuncia.AppCode.Estrutura.Realm;
 
+import java.util.Date;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -14,7 +16,7 @@ public class dbDenuncia extends RealmObject {
     public String titulo;
     public String descricao;
     public String situacao;
-    public String data;
+    public Date data;
     public String categoria_animal;
     public String tipo_animal;
     public String endereco;

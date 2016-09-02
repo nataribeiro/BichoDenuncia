@@ -45,6 +45,7 @@
             android:inputType="textMultiLine|textWebEditText|textCapSentences|textLongMessage"
             android:textColorHint="@android:color/black"
             android:singleLine="false"
+            android:textCursorDrawable="@null"
             android:textColorHighlight="@android:color/black" />
 
         <ImageButton

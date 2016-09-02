@@ -112,7 +112,8 @@
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/white"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:singleLine="true" />
 
 
         </LinearLayout>
@@ -128,7 +129,7 @@
         <ImageButton
             android:id="@+id/btn_pesquisar_denuncias"
             android:background="@android:color/transparent"
-            android:src="@drawable/pesquisar"
+            android:src="@drawable/pesquisar_cinza"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
